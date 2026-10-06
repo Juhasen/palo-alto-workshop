@@ -22,7 +22,6 @@ This demo demonstrates how **repository guardrails** in `CLAUDE.md` enforce:
 - `CLAUDE.md` — Repository instructions defining the guardrails.
 - `task.md` — The feature specification.
 - `prompt.md` — Step-by-step prompts for participants.
-- `instructor/` — Solution and facilitation guide.
 
 ## Participant Flow
 

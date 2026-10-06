@@ -6,7 +6,7 @@
 fetch ticket → /quick-spec → approve → new chat → /quick-dev → verify (high effort) → /adversarial-review → draft PR
 ```
 
-Three project skills in `.claude/skills/` carry the loop (`quick-spec`, `quick-dev`, `adversarial-review`). They are short on purpose: they state goals and gotchas, not scripts. Each sets its own model: **Opus plans and reviews, Sonnet implements** (see [MODEL-ROUTING.md](../../MODEL-ROUTING.md)). They are workshop examples, not built-in commands. Keep `instructor/` closed while you work.
+Three project skills in `.claude/skills/` carry the loop (`quick-spec`, `quick-dev`, `adversarial-review`). They are short on purpose: they state goals and gotchas, not scripts. Each sets its own model: **Opus plans and reviews, Sonnet implements** (see [MODEL-ROUTING.md](../../MODEL-ROUTING.md)). They are workshop examples, not built-in commands.
 
 ## Setup
 

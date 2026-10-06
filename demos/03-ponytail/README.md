@@ -35,7 +35,6 @@ Start a new session; the startup text names the active mode (lite, full, ultra).
 - `tests/range_check_test.cpp` — focused regression test.
 - `prompt.md` — two prompts for investigation and implementation.
 - `ponytail-instructions.md` — pasteable fallback when the skill is unavailable.
-- `instructor/` — solution and facilitation notes; leave this closed during the participant exercise.
 
 ## Participant flow
 

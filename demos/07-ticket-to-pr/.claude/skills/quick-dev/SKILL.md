@@ -16,5 +16,5 @@ Goal: implement the spec at the given path, prove it with the build, and report 
 
 ## Gotchas
 
-- Do not edit the public header or `instructor/` unless the spec says so.
+- Do not edit the public header unless the spec says so.
 - Passing tests on one architecture do not prove behavior on another; say which one ran.

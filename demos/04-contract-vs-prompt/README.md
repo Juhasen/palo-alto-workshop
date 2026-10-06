@@ -17,7 +17,6 @@ Participants can choose either the **C++** stack or the **Go** stack:
 - `prompts/` — The two contrasting prompts to test in Claude Code:
   - `prompt-vague.md` (Run A): Casual prompt ("Add change risk handling...").
   - `contract.md` (Run B): Specification contract with strict non-goals and verification commands.
-- `instructor/` — Facilitator notes and reference solutions.
 
 ## Participant Flow
 
