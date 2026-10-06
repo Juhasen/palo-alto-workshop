@@ -1,6 +1,6 @@
 # Palo Alto Workshop Demos
 
-These self-contained, numbered demos support both **instructor presentations** and **hands-on participant exercises** during the 3-hour workshop. They do not require access to customer source code or pre-installed custom skills.
+These self-contained, numbered demos support both **live presentations** and **hands-on participant exercises** during the 3-hour workshop. They do not require access to customer source code or pre-installed custom skills.
 
 The exercises specifically target the team's stack: **C++17 on Windows (MSVC)** dealing with a **25-year-old legacy codebase**, and **Go microservices**.
 
@@ -28,8 +28,6 @@ The exercises specifically target the team's stack: **C++17 on Windows (MSVC)** 
 Prompt audit needs no install (`/claude-api prompt-audit CLAUDE.md`). Per-demo checks and paste-in fallbacks are in the Setup section of Demos [00](00-prompt-audit/README.md), [01](01-caveman/README.md), and [03](03-ponytail/README.md). Plugins come from public repositories; follow the team's policy on third-party plugins.
 
 ## Recommended Agenda Mapping (3 Hours)
-
-Full schedule: [agenda.md](../agenda.md).
 
 | Time | Demo |
 |---|---|
