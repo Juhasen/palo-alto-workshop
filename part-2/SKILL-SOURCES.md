@@ -32,7 +32,7 @@ Small, composable skills that call each other through the Skill tool. Most issue
 | `implement` | Yes | Drives `tdd` at agreed seams, then `code-review`, then commits |
 | `implement-spec` | Yes | Parallel subagents in git worktrees per ticket. Advanced; probably a show-only |
 | `tdd` (+ `tests.md`, `mocking.md`) | Yes | Red-green at pre-agreed seams. Mentions "typechecking": for C++ read "compile" |
-| `code-review` | Yes | Two parallel subagents: Standards (repo rules + Fowler smells) and Spec. Fits the Part 1 adversarial review |
+| `code-review` | Yes | Two parallel subagents: Standards (repo rules + Fowler smells) and Spec |
 | `diagnosing-bugs` | Mostly | Feedback loop, minimise, ranked falsifiable hypotheses, instrument, regression test. **Bug analysis.** Drop `scripts/hitl-loop.template.sh` (bash) and the curl/Playwright examples |
 | `pr` | Yes | PR body: summary visual, before/after evidence, merge danger. Credits HumanLayer `show-me` |
 | `codebase-design` | Yes | Vocabulary (seam, deep module) that `tdd` and `to-spec` rely on |
