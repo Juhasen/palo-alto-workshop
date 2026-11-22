@@ -2,8 +2,6 @@
 
 **Goal:** write your own pipeline skill that takes a ticket to a validated change and a PR description, using the `pa-` skills from Build 1. Run it on the sample ticket here, where you know the code, before Build 4 runs it on a real Jira ticket.
 
-**On Google Meet:** these steps are also pasted in the chat. If you get stuck, say so any time; you may be asked to share your screen.
-
 ```text
 ticket (Jira connector or paste) → spec (stop: approval) → implement in a fresh subagent → validate (stop if red) → PR body
 ```

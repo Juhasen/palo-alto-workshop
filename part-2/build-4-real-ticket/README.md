@@ -2,8 +2,6 @@
 
 **Goal:** run the `ticket-to-pr` skill you built on a small, real ticket from your own Jira, in your own repository, and have a colleague review the result.
 
-**On Google Meet:** these steps are also pasted in the chat. If you get stuck, say so any time; you may be asked to share your screen.
-
 ## Setup (5 min)
 
 1. Pick a ticket: one component, a reproducible check, no schema or public API change. Ask the instructor if unsure.

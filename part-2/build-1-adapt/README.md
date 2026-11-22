@@ -2,8 +2,6 @@
 
 **Goal:** write an `adapt-skill` skill that holds Palo Alto's rules, run it on four of Matt Pocock's skills, and review what it changed. You leave with four `pa-*` project skills, one `docs/agents/issue-tracker.md`, and a tool you can run on the next public skill you want to use.
 
-**On Google Meet:** these steps are also pasted in the chat. If you get stuck, say so any time; you may be asked to share your screen.
-
 Claude Code does the editing. Your job is the rules and the review: you approve the findings before anything is written, and you check the result yourself.
 
 ## Setup (3 min)
