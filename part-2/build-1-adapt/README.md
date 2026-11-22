@@ -1,10 +1,10 @@
-# Build 1 — Adapt the skills you will use (30 min)
+# Build 1 — Have Claude Code adapt the skills you will use (30 min)
 
-**Goal:** turn four of Matt Pocock's skills into Palo Alto versions that make no external calls, so the pipeline you build next can rely on them. You leave with four `pa-*` project skills and one `docs/agents/issue-tracker.md` you understand line by line.
+**Goal:** write an `adapt-skill` skill that holds Palo Alto's rules, run it on four of Matt Pocock's skills, and review what it changed. You leave with four `pa-*` project skills, one `docs/agents/issue-tracker.md`, and a tool you can run on the next public skill you want to use.
 
 **On Google Meet:** these steps are also pasted in the chat. If you get stuck, say so any time; you may be asked to share your screen.
 
-The intro covered how to adapt a skill; the checklist is repeated below so you do not need the shared screen.
+Claude Code does the editing. Your job is the rules and the review: you approve the findings before anything is written, and you check the result yourself.
 
 ## Setup (3 min)
 
@@ -21,58 +21,51 @@ Find the installed skill files: ask Claude *"Show me the path of the mattpocock-
 
 ## Steps
 
-### 1. Audit (10 min)
+### 1. Write `adapt-skill` (10 min)
 
-For each of these four skills, open `SKILL.md` and every file next to it:
+```powershell
+mkdir .claude\skills -Force; Copy-Item -Recurse ..\build-1-adapt\skeleton\adapt-skill .claude\skills\
+```
+
+Fill in each section of `.claude/skills/adapt-skill/SKILL.md`. Write goals and stops, not keystrokes. It must cover:
+
+- **Source:** the upstream folder is local (the installed plugin, or a folder you copied from GitHub in the browser). Never a URL. Record the repository, path, commit, and license; stop if the license is missing or not MIT or Apache 2.0.
+- **Audit, then stop:** search every file in the folder, not only `SKILL.md`, for commands *and* phrases:
+
+  ```text
+  curl  wget  http  WebFetch  WebSearch  gh  glab  npx  npm  pip  uv
+  .sh  .py  .js  hooks  scripts/  Playwright
+  "publish to the issue tracker"   "fetch the ticket"   "open a PR"
+  ```
+
+  Each hit gets one of three fixes. **Route** it through the Jira connector or the policy broker (TBD). **Replace** it with a local file under `.scratch/` or a paste. **Delete** it when nothing approved can do it, keeping the idea in words. Write the findings to a table under `.scratch/` and stop for your approval.
+- **Calls to other skills:** point them at the `pa-` version where one exists. A `pa-` skill that calls the unadapted original silently loses your changes.
+- **`disable-model-invocation: true`:** with it, no other skill can call this one through the Skill tool. The pipeline in Build 2 calls `pa-to-spec` and `pa-implement`, so those two must lose the flag.
+- **Write:** `.claude/skills/pa-<name>/` with `SKILL.md` (renamed, approved fixes only, a "Palo Alto rules" section), `SOURCE.md` (source, commit, list of changes), and the upstream `LICENSE` unchanged. No scripts.
+- **Verify:** search the new folder again; any hit outside the rules section is a miss.
+
+### 2. Run it on the four skills (10 min)
 
 | Skill | Why the pipeline needs it |
 |---|---|
-| `to-spec` | Stage 2: ticket → spec |
-| `implement` | Stage 3: spec → code, drives `tdd` and `code-review` |
+| `to-spec` | Stage 2: ticket → spec (pipeline calls it) |
+| `implement` | Stage 3: spec → code, drives `tdd` and `code-review` (pipeline calls it) |
 | `code-review` | Stage 4: blind two-axis review |
 | `diagnosing-bugs` | Build 3: bug-ticket branch |
 
-Search for these patterns and fill in [AUDIT-WORKSHEET.md](AUDIT-WORKSHEET.md): one row per hit, with the fix you choose.
-
 ```text
-curl  wget  http  WebFetch  WebSearch
-gh   glab   npx   npm   pip   uv
-*.sh  *.py  *.js  hooks  scripts/
-"publish to the issue tracker"   "fetch the ticket"   "open a PR"
+/adapt-skill <path to the plugin's to-spec folder> --callable
 ```
 
-Three fixes:
+Read every findings table before you approve it. Run `code-review` before `implement`, so `implement` can point at `pa-code-review`. The first run that touches tickets should also write `docs/agents/issue-tracker.md`: tickets from the Jira connector, paste as fallback, specs under `.scratch/<ticket-id>/spec.md`, never `gh` or `curl`.
 
-- **Route** it through an approved route: Jira through the Claude connector, other services through the policy broker (TBD).
-- **Replace** it with a local file or a paste: "publish" becomes a file under `.scratch/`; no connector means the user pastes the ticket.
-- **Delete** it when nothing approved can do it, and keep the idea (a failing test is the feedback loop). You can ask Claude to do the first pass: *"List every line in these four skills that could make a network call, run a script, or publish somewhere. Quote the line."* Then check its list yourself; it misses phrases like "publish to the issue tracker".
+### 3. Review what it did (8 min)
 
-Also note every **call to another skill** ("Call the Skill tool with ..."). A `pa-` skill that calls the unadapted original silently loses your changes.
+Use [AUDIT-WORKSHEET.md](AUDIT-WORKSHEET.md). For each skill, open the diff between upstream and `pa-` and check it against the findings table. The misses that matter are phrases, not commands: "publish to the issue tracker" makes an agent pick a CLI on its own. Every miss is a fix to `adapt-skill` (add it to its Gotchas), not only to the `pa-` skill. Run it again if you changed it.
 
-### 2. Adapt (12 min)
+Then run `/skills` and confirm the four `pa-` skills are listed. Ask Claude: *"Using only pa-to-spec, what would you do to publish a spec?"* The answer must be a local file path, not a CLI.
 
-Create one folder per skill in your repository:
-
-```text
-.claude/skills/pa-to-spec/       SKILL.md  SOURCE.md  LICENSE
-.claude/skills/pa-implement/     ...
-.claude/skills/pa-code-review/   ...
-.claude/skills/pa-diagnosing-bugs/ ...
-docs/agents/issue-tracker.md
-```
-
-- Copy each upstream `SKILL.md`, rename `name:` to the `pa-` name, and apply your fixes.
-- If the pipeline will call the skill (`pa-to-spec`, `pa-implement`), **remove `disable-model-invocation: true`**: with it, Claude cannot invoke the skill through the Skill tool, so a skill-calling-skill chain breaks. The same applies to upstream `grill-me`; call `mattpocock-skills:grilling` instead.
-- Point skill-to-skill calls at `pa-` versions where one exists (`tdd` and `pr` need no changes; call them as `mattpocock-skills:tdd`).
-- Add a short **Palo Alto rules** section: no network, Jira only through the connector, policy broker for anything else, C++17 and MSVC 19.16, name the architecture.
-- `SOURCE.md`: upstream path, commit `49dd158`, license, and your list of changes. `LICENSE`: copy Matt Pocock's MIT license file.
-- `docs/agents/issue-tracker.md`: where tickets come from (Jira connector, paste as fallback), where specs go (`.scratch/<ticket-id>/spec.md`), and what is never allowed.
-
-### 3. Check (5 min)
-
-Run `/skills` and confirm the four `pa-` skills are listed. Ask Claude: *"Using only pa-to-spec, what would you do to publish a spec?"* The answer must be a local file path, not a CLI.
-
-When the instructor shows the reference adaptation, note any difference worth keeping.
+If you have time left, run `adapt-skill` on a fifth skill from [SKILL-SOURCES.md](../SKILL-SOURCES.md), copied from GitHub in the browser. That is how the team will bring in every public skill from now on.
 
 ## Policy broker
 
@@ -80,5 +73,6 @@ The broker is how other Palo Alto teams reach outside services. Until we know ho
 
 ## Done when
 
-- Four `pa-` skills and `docs/agents/issue-tracker.md` exist, each skill with `SOURCE.md` and `LICENSE`.
+- `adapt-skill`, four `pa-` skills, and `docs/agents/issue-tracker.md` exist, each `pa-` skill with `SOURCE.md` and `LICENSE`.
 - A search of `.claude/skills/pa-*` for `curl`, `gh `, `glab`, `http`, `Playwright`, and `.sh` finds nothing except the rules that forbid them.
+- You found at least one thing `adapt-skill` got wrong or missed, and fixed the skill, not only its output.
