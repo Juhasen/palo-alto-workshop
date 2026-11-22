@@ -11,7 +11,7 @@ Three project skills in `.claude/skills/` carry the loop (`quick-spec`, `quick-d
 ## Setup
 
 ```powershell
-cd palo-alto-training\demos\07-ticket-to-pr
+cd part-1\demos\07-ticket-to-pr
 build.bat          # baseline: 2 checks fail by design
 claude
 ```
