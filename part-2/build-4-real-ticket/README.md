@@ -2,7 +2,7 @@
 
 **Goal:** run the `ticket-to-pr` skill you built on a small, real ticket from your own Jira, in your own repository, and have a colleague review the result.
 
-**On Google Meet:** these steps are also pasted in the chat. When the instructor calls for status (every 10 minutes), reply in chat with ✅ done, 🟡 working, or 🔴 stuck. If you are 🔴, the instructor asks you to share your screen or join a breakout room.
+**On Google Meet:** these steps are also pasted in the chat. If you get stuck, unmute and say so; you may be asked to share your screen.
 
 ## Setup (5 min)
 
