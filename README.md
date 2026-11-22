@@ -1,10 +1,10 @@
 # Palo Alto Workshop: Claude Code for C++ Development
 
-Materials for a 3-hour hands-on workshop on Claude Code in a C++17 (Windows) and Go codebase.
+Hands-on workshop materials for Claude Code in a C++17 (Windows) and Go codebase, in two parts.
 
-- [`theory-presentation.html`](theory-presentation.html) — the theory deck; open it in a browser.
-- [`demos/`](demos/README.md) — eight numbered demos (00–07) with setup, prompts, and agenda mapping.
-- [`MODEL-ROUTING.md`](MODEL-ROUTING.md) — Opus plans, Sonnet implements.
-- [`GITHUB-MCP.md`](GITHUB-MCP.md) — multi-repository work with GitHub MCP.
+| Part | Topic | Start here |
+|---|---|---|
+| [Part 1](part-1/README.md) | Claude Code basics: repository instructions, Caveman, Ponytail, contracts, rules, hooks, and a ticket-to-PR loop (demos 00–07) | [`part-1/README.md`](part-1/README.md) |
+| [Part 2](part-2/README.md) | Skills that work together: adapt public skills to Palo Alto's rules and build your own `ticket-to-pr` workflow | [`part-2/README.md`](part-2/README.md) |
 
-Start with the one-time setup in [`demos/README.md`](demos/README.md), then follow the demos in order.
+Clone the repository once; each part is self-contained.

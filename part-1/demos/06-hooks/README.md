@@ -13,7 +13,7 @@ Hooks are configured in `.claude/settings.json` in this directory, so they apply
 ## 1. Dry run without Claude (2 minutes)
 
 ```powershell
-cd palo-alto-training\demos\06-hooks
+cd part-1\demos\06-hooks
 powershell -NoProfile -ExecutionPolicy Bypass -File test-hooks.ps1
 ```
 
@@ -22,7 +22,7 @@ Each line feeds a hook the JSON Claude Code would send and checks the exit code.
 ## 2. Live demo in Claude Code
 
 ```powershell
-cd palo-alto-training\demos\06-hooks
+cd part-1\demos\06-hooks
 claude
 ```
 

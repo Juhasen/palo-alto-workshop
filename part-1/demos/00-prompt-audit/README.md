@@ -39,7 +39,7 @@ Repository instructions accumulate text written for older models, which current 
    ```
 3. If your repository has no `CLAUDE.md` yet, use the fallback sample:
    ```bat
-   cd palo-alto-training\demos\00-prompt-audit
+   cd part-1\demos\00-prompt-audit
    ```
    ```text
    /claude-api prompt-audit CLAUDE.md
