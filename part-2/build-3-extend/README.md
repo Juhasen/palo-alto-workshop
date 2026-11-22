@@ -2,6 +2,8 @@
 
 **Goal:** give your `ticket-to-pr` skill a second branch. Pick **A** (bug analysis) or **B** (a documentation skill). Both use the legacy `rf_*` module in this folder, which is undocumented, uses 1998 names, and has a platform bug.
 
+**On Google Meet:** these steps are also pasted in the chat. When the instructor calls for status (every 10 minutes), reply in chat with ✅ done, 🟡 working, or 🔴 stuck. If you are 🔴, the instructor asks you to share your screen or join a breakout room.
+
 Copy your `.claude/` and `docs/` from Build 2 into this folder first.
 
 ```powershell

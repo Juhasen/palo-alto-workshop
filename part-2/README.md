@@ -24,6 +24,8 @@ Start here. You will build your own `ticket-to-pr` workflow on top of Matt Pococ
 
 Each build starts where the previous one ended: the skills you write in Build 1 are used in Build 2, and so on.
 
+The workshop runs on Google Meet. Each build starts with a short screen-share demo, then the instructor pastes the steps in chat and stops sharing; the same steps are in each build README. Every 10 minutes, reply to the status call in chat with ✅ done, 🟡 working, or 🔴 stuck. If you are stuck, you share your screen or join a breakout room.
+
 ## Rules for every skill today
 
 - Install nothing beyond Caveman, Ponytail, and `mattpocock-skills`.

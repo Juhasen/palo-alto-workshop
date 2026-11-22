@@ -2,7 +2,9 @@
 
 **Goal:** turn four of Matt Pocock's skills into Palo Alto versions that make no external calls, so the pipeline you build next can rely on them. You leave with four `pa-*` project skills and one `docs/agents/issue-tracker.md` you understand line by line.
 
-The intro covered how to adapt a skill; the checklist is repeated below so you do not need the slides.
+**On Google Meet:** these steps are also pasted in the chat. When the instructor calls for status (every 10 minutes), reply in chat with ✅ done, 🟡 working, or 🔴 stuck. If you are 🔴, the instructor asks you to share your screen or join a breakout room.
+
+The intro covered how to adapt a skill; the checklist is repeated below so you do not need the shared screen.
 
 ## Setup (3 min)
 
