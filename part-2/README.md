@@ -16,9 +16,9 @@ Start here. You will build your own `ticket-to-pr` workflow on top of Matt Pococ
 |---|---|---|
 | 0:00–0:15 | Intro presentation | |
 | 0:15–0:45 | Build 1: adapt four public skills so they make no external calls | [build-1-adapt](build-1-adapt/README.md) |
-| 0:45–1:25 | Build 2: write `ticket-to-pr` and run it on a sample ticket | [build-2-pipeline](build-2-pipeline/README.md) |
-| 1:25–1:35 | Break | |
-| 1:35–2:00 | Build 3: add a bug-analysis branch or a documentation step | [build-3-extend](build-3-extend/README.md) |
+| 0:45–1:20 | Build 2: write `ticket-to-pr` and run it on a sample ticket | [build-2-pipeline](build-2-pipeline/README.md) |
+| 1:20–1:30 | Break | |
+| 1:30–2:00 | Build 3: add a bug-analysis branch, or build a documentation skill that writes docs from code and fact-checks them | [build-3-extend](build-3-extend/README.md) |
 | 2:00–2:45 | Build 4: your real ticket, then pair review | [build-4-real-ticket](build-4-real-ticket/README.md) |
 | 2:45–3:00 | Share-out and `/retro` | |
 
