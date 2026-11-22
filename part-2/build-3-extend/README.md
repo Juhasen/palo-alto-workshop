@@ -2,7 +2,7 @@
 
 **Goal:** give your `ticket-to-pr` skill a second branch. Pick **A** (bug analysis) or **B** (a documentation skill). Both use the legacy `rf_*` module in this folder, which is undocumented, uses 1998 names, and has a platform bug.
 
-**On Google Meet:** these steps are also pasted in the chat. If you get stuck, unmute and say so; you may be asked to share your screen.
+**On Google Meet:** these steps are also pasted in the chat. If you get stuck, say so any time; you may be asked to share your screen.
 
 Copy your `.claude/` and `docs/` from Build 2 into this folder first.
 
