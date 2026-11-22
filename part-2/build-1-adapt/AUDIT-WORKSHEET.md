@@ -1,30 +1,35 @@
-# Audit worksheet
+# Review worksheet
 
-One row per finding. **Fix:** route (Jira connector or policy broker), replace (local file or paste), or delete. Skill calls go in the second table.
+`adapt-skill` audits and edits the skills. You check its work. One row per finding it reported, plus one row per miss you found in the diff.
 
-## External calls, scripts, and publishing
+## Findings
 
-| Skill | Line (quote) | What it would do | Fix | New text |
+| Skill | Line (quote) | Fix it chose (route / replace / delete) | Agree? | If not, the right fix |
 |---|---|---|---|---|
 | to-spec | | | | |
 | to-spec | | | | |
 | implement | | | | |
 | implement | | | | |
 | code-review | | | | |
-| code-review | | | | |
 | diagnosing-bugs | | | | |
 | diagnosing-bugs | | | | |
 | diagnosing-bugs | | | | |
-| diagnosing-bugs | | | | |
+
+## Misses (in the diff, not in its findings)
+
+| Skill | Line (quote) | Why it matters | Gotcha added to adapt-skill |
+|---|---|---|---|
+| | | | |
+| | | | |
 
 ## Calls to other skills
 
-| Skill | Calls | Keep original or point at `pa-`? |
-|---|---|---|
-| | | |
-| | | |
+| Skill | Calls | Points at `pa-` or the original? | Correct? |
+|---|---|---|---|
+| | | | |
+| | | | |
 
 ## Questions for the team
 
 - Which of these would the policy broker handle for us?
-- Which upstream changes should we watch for when the plugin updates?
+- Who runs `adapt-skill` again when the plugin updates?

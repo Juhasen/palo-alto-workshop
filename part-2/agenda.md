@@ -14,7 +14,7 @@
 | Time | Session | Material | Outcome |
 |---|---|---|---|
 | 0:00–0:15 | Intro (presented by the instructor): what a skill is, two ways it starts, what skills make possible, Matt Pocock's skills, Palo Alto rules, adapting a skill (find, fix, save), what we build. | Slides | Shared vocabulary and the target pipeline. |
-| 0:15–0:45 | Build 1: audit four skills for external calls and adapt them as `pa-` project skills. | [build-1-adapt](build-1-adapt/README.md) | `pa-to-spec`, `pa-implement`, `pa-code-review`, `pa-diagnosing-bugs`, and `docs/agents/issue-tracker.md`. |
+| 0:15–0:45 | Build 1: write an `adapt-skill` skill, run it on four skills, and review what it changed. | [build-1-adapt](build-1-adapt/README.md) | `adapt-skill`, `pa-to-spec`, `pa-implement`, `pa-code-review`, `pa-diagnosing-bugs`, and `docs/agents/issue-tracker.md`. |
 | 0:45–1:20 | Build 2: write `ticket-to-pr` and run it stage by stage on NET-1502. | [build-2-pipeline](build-2-pipeline/README.md) | A pipeline skill that reaches a PR description or stops with a reason. |
 | 1:20–1:30 | Break. | | |
 | 1:30–2:00 | Build 3: add a bug-analysis branch (AUD-877), or build a `document-module` skill: cited "how it works today" doc, glossary and ADRs, fresh-context fact-check. | [build-3-extend](build-3-extend/README.md) | One new branch in the pipeline, or a documentation skill the pipeline calls. |
