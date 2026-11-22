@@ -2,6 +2,8 @@
 
 **Goal:** run the `ticket-to-pr` skill you built on a small, real ticket from your own Jira, in your own repository, and have a colleague review the result.
 
+**On Google Meet:** these steps are also pasted in the chat. If you get stuck, unmute and say so; you may be asked to share your screen.
+
 ## Setup (5 min)
 
 1. Pick a ticket: one component, a reproducible check, no schema or public API change. Ask the instructor if unsure.
@@ -20,7 +22,7 @@ The Jira connector reads the ticket. If it is not available, the skill asks you 
 
 ## Pair review (15 min)
 
-Swap with your neighbour and review in this order:
+At 2:30 the instructor opens breakout rooms in pairs. Share your screen in turn and review in this order:
 
 1. The spec against the ticket: is every acceptance criterion there, and nothing extra?
 2. The diff against the spec: open the diff, not the summary.

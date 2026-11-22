@@ -1,6 +1,8 @@
-# Build 2 — Write `ticket-to-pr` and run it on a sample ticket (40 min)
+# Build 2 — Write `ticket-to-pr` and run it on a sample ticket (35 min)
 
 **Goal:** write your own pipeline skill that takes a ticket to a validated change and a PR description, using the `pa-` skills from Build 1. Run it on the sample ticket here, where you know the code, before Build 4 runs it on a real Jira ticket.
+
+**On Google Meet:** these steps are also pasted in the chat. If you get stuck, unmute and say so; you may be asked to share your screen.
 
 ```text
 ticket (Jira connector or paste) → spec (stop: approval) → implement in a fresh subagent → validate (stop if red) → PR body
@@ -27,7 +29,7 @@ The sample is [TICKET.md](TICKET.md) (NET-1502): combined timeout units and an o
 
 ## Steps
 
-### 1. Write the skeleton (12 min)
+### 1. Write the skeleton (10 min)
 
 Open `.claude/skills/ticket-to-pr/SKILL.md` (copied from `skeleton/`). Replace each `<...>` with goals and stop conditions, not keystrokes. Each section answers one question: where the ticket comes from and where it is saved; which skill runs, on which model, in which context; which command proves it and what blocks the PR; what evidence the PR body needs. Decide for each stage:
 
@@ -35,7 +37,7 @@ Open `.claude/skills/ticket-to-pr/SKILL.md` (copied from `skeleton/`). Replace e
 - whether it runs here or in a fresh subagent;
 - what it must hand back, and what makes the pipeline stop.
 
-### 2. Run it stage by stage (20 min)
+### 2. Run it stage by stage (18 min)
 
 ```text
 /ticket-to-pr TICKET.md
