@@ -49,7 +49,7 @@ Adapt these five, in this order, because each later skill calls the earlier ones
 
 | Skill | Why the pipeline needs it |
 |---|---|
-| `code-review` | Stage 4: blind two-axis review. Calls nothing, but tells the user to run `/setup-matt-pocock-skills` |
+| `code-review` | Stage 4: blind two-axis review in two sub-agents. Calls no skill, but tells the user to run `/setup-matt-pocock-skills` and fetches issue references (`#123`, GitLab `!67`) from the tracker |
 | `implement` | Stage 3: spec → code. Calls `tdd` and `code-review` (pipeline calls it, so `--callable`) |
 | `to-spec` | Stage 2: ticket → spec saved as a local file (pipeline calls it, so `--callable`) |
 | `diagnosing-bugs` | Build 3: bug-ticket branch. Calls nothing |
@@ -61,7 +61,7 @@ These are used as they are, by their plugin name. `adapt-skill` should find them
 |---|---|---|
 | `tdd` | `implement` | Calls only `codebase-design` and mentions `code-review`; no network, no tracker. Its examples are TypeScript, which is fine as reading |
 | `codebase-design` | `tdd` | Reference only; "HTTP" appears in design advice, not as an action |
-| `grilling`, `domain-modeling` | `ticket-to-pr` in Build 2 | No network, no tracker, callable |
+| `grilling`, `domain-modeling` | `ticket-to-pr` in Build 2 | No network, no tracker, callable. They only start local sub-agents or write `GLOSSARY.md` and ADRs |
 
 ```text
 /adapt-skill <path to the plugin's to-spec folder> --callable
