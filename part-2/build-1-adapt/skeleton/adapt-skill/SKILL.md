@@ -12,7 +12,7 @@ Goal: <one sentence: what exists at the end, and what this skill never does>
 ## Palo Alto rules (what every adapted skill must obey)
 
 - No network from the agent: no curl, wget, gh, glab, npx, or web fetch.
-- Jira only through the Claude Jira connector; other services only through the policy broker (TBD); otherwise the user pastes the content.
+- Jira only through the Claude Jira connector, and only to read tickets: never create or update a Jira issue. Other services only through the policy broker (TBD); otherwise the user pastes the content.
 - Plain Markdown only: no scripts, hooks, or installers.
 - Endpoint policy: never read `.env`, `./secrets/`, `credentials.json`, `~/.ssh`, `~/.aws`, or `./build`; never suggest changing permissions.
 - C++17, legacy target MSVC 19.16. Name the compiler and architecture behind every claim.
@@ -24,7 +24,7 @@ Goal: <one sentence: what exists at the end, and what this skill never does>
 
 ## 2. Audit (stop: user approves the findings)
 
-<Which commands and which phrases do you search for? Where do you write the findings, in what table? Which three fixes are allowed? What do you do with calls to other skills?>
+<Which commands and which phrases do you search for? Where do you write the findings, in what table? Which three fixes are allowed? What counts as a finding, and what does not? What do you do with a call to a skill that has no pa- version?>
 
 ## 3. Write the pa- skill
 
