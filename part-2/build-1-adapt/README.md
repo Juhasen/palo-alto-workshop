@@ -36,26 +36,37 @@ Fill in each section of `.claude/skills/adapt-skill/SKILL.md`. Write goals and s
   "publish to the issue tracker"   "fetch the ticket"   "open a PR"
   ```
 
-  Each hit gets one of three fixes. **Route** it through the Jira connector or the policy broker (TBD). **Replace** it with a local file under `.scratch/` or a paste. **Delete** it when nothing approved can do it, keeping the idea in words. Write the findings to a table under `.scratch/` and stop for your approval.
-- **Calls to other skills:** point them at the `pa-` version where one exists. A `pa-` skill that calls the unadapted original silently loses your changes.
+  Each hit gets one of three fixes. **Route** it through the Jira connector (reading tickets only, never creating or updating issues) or the policy broker (TBD). **Replace** it with a local file under `.scratch/` or a paste. **Delete** it when nothing approved can do it, keeping the idea in words. Write the findings to a table under `.scratch/` and stop for your approval.
+- **What is not a finding:** files for other agents (`agents/openai.yaml`) are simply not copied, and words in sample code or design advice ("HTTP", `fetch()` in a TypeScript example) are not actions.
+- **Calls to other skills:** point them at the `pa-` version where one exists. If there is none, read the called skill: a clean one is called as-is by its plugin name (`mattpocock-skills:tdd`); one with findings must be adapted first. Never replace a call with a written-out summary, and a `pa-` skill must never call an unadapted original that has findings.
 - **`disable-model-invocation: true`:** with it, no other skill can call this one through the Skill tool. The pipeline in Build 2 calls `pa-to-spec` and `pa-implement`, so those two must lose the flag.
 - **Write:** `.claude/skills/pa-<name>/` with `SKILL.md` (renamed, approved fixes only, a "Palo Alto rules" section), `SOURCE.md` (source, commit, list of changes), and the upstream `LICENSE` unchanged. No scripts.
 - **Verify:** search the new folder again; any hit outside the rules section is a miss.
 
 ### 2. Run it on the four skills (10 min)
 
+Adapt these four, in this order, because each later skill calls the earlier ones:
+
 | Skill | Why the pipeline needs it |
 |---|---|
-| `to-spec` | Stage 2: ticket → spec (pipeline calls it) |
-| `implement` | Stage 3: spec → code, drives `tdd` and `code-review` (pipeline calls it) |
-| `code-review` | Stage 4: blind two-axis review |
-| `diagnosing-bugs` | Build 3: bug-ticket branch |
+| `code-review` | Stage 4: blind two-axis review. Calls nothing, but tells the user to run `/setup-matt-pocock-skills` |
+| `implement` | Stage 3: spec → code. Calls `tdd` and `code-review` (pipeline calls it, so `--callable`) |
+| `to-spec` | Stage 2: ticket → spec saved as a local file (pipeline calls it, so `--callable`) |
+| `diagnosing-bugs` | Build 3: bug-ticket branch. Calls nothing |
+
+These are used as they are, by their plugin name. `adapt-skill` should find them clean and not copy them:
+
+| Skill | Called by | Why no copy |
+|---|---|---|
+| `tdd` | `implement` | Calls only `codebase-design` and mentions `code-review`; no network, no tracker. Its examples are TypeScript, which is fine as reading |
+| `codebase-design` | `tdd` | Reference only; "HTTP" appears in design advice, not as an action |
+| `grilling`, `domain-modeling` | `ticket-to-pr` in Build 2 | No network, no tracker, callable |
 
 ```text
 /adapt-skill <path to the plugin's to-spec folder> --callable
 ```
 
-Read every findings table before you approve it. Run `code-review` before `implement`, so `implement` can point at `pa-code-review`. The first run that touches tickets should also write `docs/agents/issue-tracker.md`: tickets from the Jira connector, paste as fallback, specs under `.scratch/<ticket-id>/spec.md`, never `gh` or `curl`.
+Read every findings table before you approve it. The first run that touches tickets should also write `docs/agents/issue-tracker.md`: tickets read from the Jira connector, paste as fallback, specs under `.scratch/<ticket-id>/spec.md`, never `gh` or `curl`, never a new Jira issue. Check that every `pa-` skill uses those same paths: `ticket-to-pr` in Build 2 looks for `.scratch/<ticket-id>/spec.md`, not `.scratch/spec-<slug>.md`.
 
 ### 3. Review what it did (8 min)
 
