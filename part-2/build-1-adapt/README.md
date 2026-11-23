@@ -19,7 +19,15 @@ Find the installed skill files: ask Claude *"Show me the path of the mattpocock-
 
 ## Steps
 
-### 1. Write `adapt-skill` (10 min)
+### 1. Write the tracker config (3 min)
+
+Matt Pocock's skills expect a `/setup-matt-pocock-skills` run that tells them where tickets live. That setup skill runs `gh`/`glab` and creates labels, so we replace it with one file every `pa-` skill and `ticket-to-pr` will read. Ask Claude to write `docs/agents/issue-tracker.md` with exactly these rules, then read it:
+
+- **Tickets** live in Jira. Read them through the Claude Jira connector (read only); if it is not available, the user pastes the ticket. Save it to `.scratch/<ticket-id>/ticket.md`.
+- **"Publish to the issue tracker"** means writing a file: the spec to `.scratch/<ticket-id>/spec.md`, the PR body to `.scratch/<ticket-id>/pr.md`.
+- **Never:** `gh`, `glab`, `curl`, or any web API; never create, update, label, or comment on a Jira issue; other services only through the policy broker (TBD).
+
+### 2. Write `adapt-skill` (7 min)
 
 ```powershell
 mkdir .claude\skills -Force; Copy-Item -Recurse ..\build-1-adapt\skeleton\adapt-skill .claude\skills\
@@ -38,12 +46,13 @@ Fill in each section of `.claude/skills/adapt-skill/SKILL.md`. Write goals and s
 
   Each hit gets one of three fixes. **Route** it through the Jira connector (reading tickets only, never creating or updating issues) or the policy broker (TBD). **Replace** it with a local file under `.scratch/` or a paste. **Delete** it when nothing approved can do it, keeping the idea in words. Write the findings to a table under `.scratch/` and stop for your approval.
 - **What is not a finding:** files for other agents (`agents/openai.yaml`) are simply not copied, and words in sample code or design advice ("HTTP", `fetch()` in a TypeScript example) are not actions.
+- **Tracker:** stop if `docs/agents/issue-tracker.md` is missing. Replace "run `/setup-matt-pocock-skills`", "fetch from the issue tracker", and "publish to the issue tracker" with "follow `docs/agents/issue-tracker.md`".
 - **Calls to other skills:** point them at the `pa-` version where one exists. If there is none, read the called skill: a clean one is called as-is by its plugin name (`mattpocock-skills:tdd`); one with findings must be adapted first. Never replace a call with a written-out summary, and a `pa-` skill must never call an unadapted original that has findings.
 - **`disable-model-invocation: true`:** with it, no other skill can call this one through the Skill tool. The pipeline in Build 2 calls `pa-to-spec` and `pa-implement`, so those two must lose the flag.
 - **Write:** `.claude/skills/pa-<name>/` with `SKILL.md` (renamed, approved fixes only, a "Palo Alto rules" section), `SOURCE.md` (source, commit, list of changes), and the upstream `LICENSE` unchanged. No scripts.
 - **Verify:** search the new folder again; any hit outside the rules section is a miss.
 
-### 2. Run it on the five skills (10 min)
+### 3. Run it on the five skills (10 min)
 
 Adapt these five, in this order, because each later skill calls the earlier ones:
 
@@ -67,9 +76,9 @@ These are used as they are, by their plugin name. `adapt-skill` should find them
 /adapt-skill <path to the plugin's to-spec folder> --callable
 ```
 
-Read every findings table before you approve it. The first run that touches tickets should also write `docs/agents/issue-tracker.md`: tickets read from the Jira connector, paste as fallback, specs under `.scratch/<ticket-id>/spec.md`, never `gh` or `curl`, never a new Jira issue. Check that every `pa-` skill uses those same paths: `ticket-to-pr` in Build 2 looks for `.scratch/<ticket-id>/spec.md`, not `.scratch/spec-<slug>.md`.
+Read every findings table before you approve it. Wherever upstream says "run `/setup-matt-pocock-skills`" or "publish to the issue tracker", the fix should point at `docs/agents/issue-tracker.md`, not delete the line. Check that every `pa-` skill uses the same paths: `ticket-to-pr` in Build 2 looks for `.scratch/<ticket-id>/spec.md`, not `.scratch/spec-<slug>.md`.
 
-### 3. Review what it did (8 min)
+### 4. Review what it did (7 min)
 
 Use [AUDIT-WORKSHEET.md](AUDIT-WORKSHEET.md). For each skill, open the diff between upstream and `pa-` and check it against the findings table. The misses that matter are phrases, not commands: "publish to the issue tracker" makes an agent pick a CLI on its own. Every miss is a fix to `adapt-skill` (add it to its Gotchas), not only to the `pa-` skill. Run it again if you changed it.
 
