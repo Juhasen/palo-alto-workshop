@@ -14,6 +14,7 @@ Goal: <one sentence: what exists at the end, and what this skill never does>
 - No network from the agent: no curl, wget, gh, glab, npx, or web fetch.
 - Jira only through the Claude Jira connector; other services only through the policy broker (TBD); otherwise the user pastes the content.
 - Plain Markdown only: no scripts, hooks, or installers.
+- Endpoint policy: never read `.env`, `./secrets/`, `credentials.json`, `~/.ssh`, `~/.aws`, or `./build`; never suggest changing permissions.
 - C++17, legacy target MSVC 19.16. Name the compiler and architecture behind every claim.
 - <anything else?>
 
