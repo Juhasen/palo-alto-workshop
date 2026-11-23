@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en" data-theme="paloalto">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Skills That Work Together</title>
+  <style>
+    :root {
+      --bg-dark:#0f141c; --bg-dark-card:#181f2c; --bg-light:#f4f6f8; --bg-white:#fff;
+      --text-dark:#12161f; --text-muted:#556275; --text-light:#fff; --text-light-muted:#9ba7b7;
+      --primary:#fa582d; --primary-light:#fff0eb; --accent:#00c0f3; --line:#dce2e8;
+      --success:#2aa876; --shadow:0 24px 70px rgba(15,20,28,.18);
+      --font:"Avenir Next","Segoe UI",Arial,sans-serif;
+    }
+    html[data-theme="ocean"] { --primary:#0b78d0; --primary-light:#eaf5ff; --accent:#13a8a8; --bg-dark:#0b1725; }
+    html[data-theme="forest"] { --primary:#23805e; --primary-light:#eaf7f0; --accent:#d49b27; --bg-dark:#102019; }
+    html[data-theme="mono"] { --primary:#242933; --primary-light:#eceff3; --accent:#697586; --bg-dark:#101216; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; height:100%; margin:0; overflow:hidden; background:#080b10; font-family:var(--font); color:var(--text-dark); }
+    button { font:inherit; }
+    .deck { position:relative; width:100%; height:100%; display:grid; place-items:center; }
+    .slide-container { position:relative; width:1280px; height:720px; overflow:hidden; background:var(--bg-light); box-shadow:var(--shadow); transform-origin:center; }
+    .slide { position:absolute; inset:0; display:none; padding:58px 68px 48px; background:var(--bg-light); }
+    .slide.active { display:block; }
+    .slide.dark { color:var(--text-light); background:var(--bg-dark); }
+    .slide.white { background:var(--bg-white); }
+    .slide::after { content:attr(data-index); position:absolute; right:30px; bottom:20px; font-size:12px; font-weight:800; letter-spacing:.14em; color:var(--text-muted); }
+    .slide.dark::after { color:var(--text-light-muted); }
+    .eyebrow { margin:0 0 10px; color:var(--primary); font-size:14px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { max-width:1040px; margin-bottom:20px; font-size:64px; line-height:1.01; letter-spacing:-.045em; }
+    h2 { max-width:1100px; margin-bottom:16px; font-size:42px; line-height:1.08; letter-spacing:-.035em; }
+    h3 { margin-bottom:8px; font-size:21px; line-height:1.15; }
+    p { font-size:20px; line-height:1.45; }
+    .lead { max-width:900px; color:var(--text-muted); font-size:24px; line-height:1.35; }
+    .dark .lead { color:var(--text-light-muted); }
+    .muted { color:var(--text-muted); }
+    .dark .muted { color:var(--text-light-muted); }
+    .accent { color:var(--primary); }
+    .meta { position:absolute; left:68px; bottom:50px; color:var(--text-light-muted); font-size:15px; font-weight:700; letter-spacing:.04em; }
+    .brand-mark { position:absolute; top:54px; right:68px; display:flex; align-items:center; gap:11px; font-size:13px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+    .brand-mark i { display:block; width:18px; height:18px; background:var(--primary); clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%); }
+    .hero-orbit { position:absolute; right:-92px; bottom:-195px; width:610px; height:610px; border:1px solid rgba(255,255,255,.16); border-radius:50%; }
+    .hero-orbit::before,.hero-orbit::after { content:""; position:absolute; border-radius:50%; }
+    .hero-orbit::before { inset:84px; border:2px solid rgba(0,192,243,.38); }
+    .hero-orbit::after { inset:180px; background:var(--primary); box-shadow:0 0 0 28px rgba(250,88,45,.15); }
+    .hero-node { position:absolute; right:304px; bottom:203px; width:16px; height:16px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 8px rgba(0,192,243,.14); }
+    .section-head { display:flex; align-items:flex-end; justify-content:space-between; gap:32px; margin-bottom:28px; }
+    .section-head p { max-width:355px; margin-bottom:3px; color:var(--text-muted); font-size:17px; }
+    .panel { background:var(--bg-white); border:1px solid var(--line); border-radius:18px; box-shadow:0 12px 30px rgba(17,22,31,.06); }
+    .dark .panel { background:var(--bg-dark-card); border-color:rgba(255,255,255,.1); box-shadow:none; }
+    .bridge { display:grid; grid-template-columns:1fr 1.18fr 1fr; gap:18px; align-items:stretch; height:410px; }
+    .bridge-side { padding:30px; display:flex; flex-direction:column; justify-content:space-between; }
+    .bridge-side strong { font-size:27px; }
+    .bridge-side ul { margin:0; padding:0; list-style:none; display:grid; gap:13px; }
+    .bridge-side li { padding:12px 14px; background:var(--bg-light); border-radius:10px; font-size:16px; font-weight:700; }
+    .bridge-center { position:relative; display:grid; place-items:center; overflow:hidden; background:var(--bg-dark); color:white; border-radius:18px; }
+    .bridge-center svg { position:absolute; inset:0; width:100%; height:100%; }
+    .bridge-copy { position:relative; z-index:2; width:72%; text-align:center; }
+    .bridge-copy b { display:block; margin-bottom:11px; color:var(--primary); font-size:14px; letter-spacing:.12em; text-transform:uppercase; }
+    .bridge-copy strong { display:block; font-size:30px; line-height:1.12; }
+    .repo { display:grid; grid-template-columns:.86fr 1.55fr; gap:26px; height:418px; }
+    .tree { padding:27px 30px; background:var(--bg-dark); color:white; border-radius:18px; font-family:"SFMono-Regular",Consolas,monospace; }
+    .tree div { padding:8px 0; color:var(--text-light-muted); font-size:16px; }
+    .tree .root { color:white; font-weight:800; }
+    .tree .hot { color:var(--primary); }
+    .tree .cool { color:var(--accent); }
+    .repo-cards { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .repo-card { padding:26px; position:relative; }
+    .repo-card::before { content:""; display:block; width:36px; height:5px; margin-bottom:24px; background:var(--primary); border-radius:9px; }
+    .repo-card:nth-child(2)::before { background:var(--accent); }
+    .repo-card p { margin:0; color:var(--text-muted); font-size:17px; }
+    .matrix { display:grid; grid-template-columns:135px 1fr 1fr; grid-template-rows:48px 1fr 1fr; gap:12px; height:414px; }
+    .axis { display:grid; place-items:center; color:var(--text-muted); font-size:13px; font-weight:900; letter-spacing:.11em; text-transform:uppercase; }
+    .cell { padding:22px 24px; border-radius:16px; border:1px solid var(--line); background:white; }
+    .cell.featured { border-color:var(--primary); background:var(--primary-light); }
+    .cell .tag { display:inline-block; margin-bottom:14px; padding:5px 9px; border-radius:99px; background:var(--bg-light); color:var(--text-muted); font-size:12px; font-weight:900; text-transform:uppercase; }
+    .cell.featured .tag { background:white; color:var(--primary); }
+    .cell p { margin:0; color:var(--text-muted); font-size:15px; }
+    .duo { display:grid; grid-template-columns:1fr 1fr; gap:24px; height:410px; }
+    .mode-card { display:flex; flex-direction:column; overflow:hidden; padding:30px 32px; }
+    .mode-card .sample-label { margin-bottom:12px; color:var(--primary); font-size:13px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+    .mode-card:nth-child(2) .sample-label { color:#0785a5; }
+    .mode-card h3 { font-size:29px; }
+    .mode-card pre { margin:26px 0 0; padding:20px; white-space:pre-wrap; background:var(--bg-dark); color:white; border-radius:12px; font-size:17px; line-height:1.55; }
+    .mode-card .sample-status { margin:28px 0 0; font-size:25px; font-weight:800; line-height:1.35; }
+    .mode-card .sample-note { margin-top:auto; color:var(--text-muted); font-size:16px; }
+    .diamond-wrap { display:grid; grid-template-columns:1.6fr .8fr; gap:30px; height:408px; }
+    .diamond { position:relative; overflow:hidden; background:white; border:1px solid var(--line); border-radius:18px; }
+    .diamond svg { position:absolute; inset:38px 30px 72px; width:calc(100% - 60px); height:calc(100% - 110px); }
+    .diamond-labels { position:absolute; inset:0; }
+    .diamond-labels span { position:absolute; padding:7px 11px; background:white; border:1px solid var(--line); border-radius:9px; font-size:13px; font-weight:900; }
+    .diamond-labels .l1 { left:7%; top:46%; } .diamond-labels .l2 { left:35%; top:11%; } .diamond-labels .l3 { left:58%; top:70%; } .diamond-labels .l4 { right:6%; top:46%; }
+    .contract-list { display:grid; gap:14px; }
+    .contract-item { padding:18px 20px; background:white; border-left:5px solid var(--primary); border-radius:12px; box-shadow:0 8px 24px rgba(15,20,28,.06); }
+    .contract-item:nth-child(2) { border-color:var(--accent); }
+    .contract-item:nth-child(3) { border-color:var(--success); }
+    .contract-item b { display:block; margin-bottom:3px; font-size:16px; }
+    .contract-item span { color:var(--text-muted); font-size:14px; }
+    .pipeline { position:relative; display:grid; grid-template-columns:repeat(5,1fr); gap:16px; align-items:center; height:410px; }
+    .pipeline::before { content:""; position:absolute; left:9%; right:9%; top:50%; height:4px; background:var(--line); transform:translateY(-50%); }
+    .stage { position:relative; z-index:2; min-height:226px; padding:25px 20px; background:white; border:1px solid var(--line); border-radius:16px; box-shadow:0 10px 25px rgba(15,20,28,.06); }
+    .stage::after { content:""; position:absolute; left:20px; right:20px; bottom:-10px; height:10px; background:var(--primary); border-radius:0 0 8px 8px; }
+    .stage:nth-child(3)::after,.stage:nth-child(5)::after { background:var(--accent); }
+    .stage b { display:block; margin-bottom:22px; color:var(--primary); font-size:13px; letter-spacing:.1em; text-transform:uppercase; }
+    .stage strong { display:block; margin-bottom:10px; font-size:20px; }
+    .stage span { color:var(--text-muted); font-size:14px; line-height:1.35; }
+    .funnel-wrap { display:grid; grid-template-columns:1.42fr .72fr; gap:26px; height:410px; }
+    .funnel { position:relative; padding:25px; background:white; border:1px solid var(--line); border-radius:18px; }
+    .funnel-row { height:78px; margin:0 auto 10px; display:grid; place-items:center; color:white; font-weight:900; clip-path:polygon(7% 0,93% 0,85% 100%,15% 100%); }
+    .funnel-row:nth-child(1){ width:96%; background:#3f4b5c; }
+    .funnel-row:nth-child(2){ width:78%; background:#59677a; }
+    .funnel-row:nth-child(3){ width:60%; background:#69798e; }
+    .funnel-row:nth-child(4){ width:42%; background:var(--primary); }
+    .question-stack { display:grid; gap:14px; align-content:center; }
+    .question { padding:18px 20px; background:var(--bg-dark); color:white; border-radius:12px; font-size:17px; font-weight:800; }
+    .question em { color:var(--primary); font-style:normal; }
+    .platform { display:grid; grid-template-columns:1fr 90px 1fr; gap:12px; height:408px; align-items:center; }
+    .platform-card { height:100%; padding:28px; background:white; border:1px solid var(--line); border-radius:18px; }
+    .platform-card h3 { margin-bottom:24px; }
+    .platform-list { display:grid; gap:13px; }
+    .platform-list div { padding:13px 14px; background:var(--bg-light); border-radius:10px; font-size:15px; font-weight:750; }
+    .platform-link { position:relative; height:100%; }
+    .platform-link::before { content:""; position:absolute; left:50%; top:14%; bottom:14%; width:3px; background:var(--line); transform:translateX(-50%); }
+    .platform-link::after { content:""; position:absolute; left:50%; top:50%; width:22px; height:22px; border-radius:50%; background:var(--primary); box-shadow:0 0 0 10px var(--primary-light); transform:translate(-50%,-50%); }
+    .evidence { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; height:408px; align-items:center; }
+    .evidence-step { position:relative; min-height:250px; padding:28px 23px; background:white; border:1px solid var(--line); border-radius:16px; }
+    .evidence-step:not(:last-child)::after { content:""; position:absolute; z-index:2; right:-25px; top:50%; width:30px; height:3px; background:var(--primary); }
+    .evidence-step .disc { width:46px; height:46px; margin-bottom:35px; border-radius:50%; background:var(--primary-light); border:9px solid white; box-shadow:0 0 0 2px var(--primary); }
+    .evidence-step:nth-child(even) .disc { background:#e8f9fd; box-shadow:0 0 0 2px var(--accent); }
+    .evidence-step p { margin:0; color:var(--text-muted); font-size:15px; }
+    .cta-grid { display:grid; grid-template-columns:1.22fr .78fr; gap:34px; height:420px; }
+    .steps { display:grid; gap:15px; }
+    .next-step { display:grid; grid-template-columns:48px 1fr; gap:15px; align-items:center; padding:17px 19px; background:white; border:1px solid var(--line); border-radius:13px; }
+    .next-step b { display:grid; place-items:center; width:38px; height:38px; border-radius:50%; background:var(--primary); color:white; }
+    .next-step strong { display:block; margin-bottom:3px; font-size:17px; }
+    .next-step span { color:var(--text-muted); font-size:14px; }
+    .pilot { padding:31px; background:var(--bg-dark); color:white; border-radius:18px; display:flex; flex-direction:column; justify-content:space-between; }
+    .pilot .big { font-size:72px; font-weight:900; letter-spacing:-.06em; color:var(--primary); }
+    .pilot p { margin:0; color:var(--text-light-muted); font-size:17px; }
+    .qa { display:grid; grid-template-columns:1.2fr .8fr; gap:34px; align-items:center; height:100%; }
+    .qa h2 { font-size:68px; }
+    .qa-card { position:relative; height:430px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.12); border-radius:30px; background:var(--bg-dark-card); overflow:hidden; }
+    .qa-card .qmark { position:relative; z-index:2; font-size:210px; line-height:1; font-weight:900; color:var(--primary); }
+    .qa-card::before,.qa-card::after { content:""; position:absolute; border-radius:50%; border:1px solid rgba(0,192,243,.28); }
+    .qa-card::before { width:310px; height:310px; } .qa-card::after { width:470px; height:470px; }
+    .story { display:grid; grid-template-columns:1fr 1fr; gap:24px; height:410px; }
+    .code-panel { padding:26px 28px; display:flex; flex-direction:column; }
+    .code-panel .label { margin-bottom:14px; color:var(--primary); font-size:13px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+    .code-panel pre { margin:0; padding:20px; white-space:pre-wrap; background:var(--bg-dark); color:white; border-radius:12px; font-family:"SFMono-Regular",Consolas,monospace; font-size:16px; line-height:1.6; }
+    .code-panel .ok { color:#6be3b0; } .code-panel .bad { color:#ff8a6b; } .code-panel .dim { color:var(--text-light-muted); }
+    .code-panel .note { margin:18px 0 0; color:var(--text-muted); font-size:17px; }
+    .levels { display:grid; grid-template-columns:repeat(5,1fr); gap:14px; align-items:end; height:340px; }
+    .level { padding:22px 20px; background:white; border:1px solid var(--line); border-top:6px solid var(--primary); border-radius:16px; }
+    .level:nth-child(1) { height:50%; } .level:nth-child(2) { height:62%; } .level:nth-child(3) { height:74%; } .level:nth-child(4) { height:87%; } .level:nth-child(5) { height:100%; }
+    .level:nth-child(even) { border-top-color:var(--accent); }
+    .level b { display:block; margin-bottom:10px; color:var(--primary); font-size:13px; letter-spacing:.1em; text-transform:uppercase; }
+    .level strong { display:block; margin-bottom:8px; font-size:20px; }
+    .level span { color:var(--text-muted); font-size:15px; line-height:1.35; }
+    .quick-check { display:grid; gap:10px; margin:22px 0 0; padding:0; list-style:none; }
+    .quick-check li { display:grid; grid-template-columns:58px 1fr; align-items:center; min-height:59px; overflow:hidden; background:white; transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease; }
+    .quick-check li:hover { transform:translateX(8px); border-color:var(--primary); box-shadow:0 15px 32px rgba(15,20,28,.1); }
+    .quick-check li b { align-self:stretch; display:grid; place-items:center; background:var(--primary); color:white; font-size:21px; }
+    .quick-check li:nth-child(even) b { background:var(--accent); }
+    .quick-check li span { padding:0 20px; font-size:17px; font-weight:750; }
+    .quick-check-slide .eyebrow { max-width:none; white-space:nowrap; }
+    .footnote { margin:22px 0 0; color:var(--text-muted); font-size:17px; }
+    .toolcards { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; height:420px; }
+    .toolcard { padding:22px; display:flex; flex-direction:column; overflow:hidden; }
+    .toolcard .art { height:132px; margin-bottom:16px; border-radius:12px; display:grid; place-items:center; overflow:hidden; background:var(--bg-light); }
+    .toolcard .art img { display:block; max-width:100%; max-height:124px; width:auto; height:auto; object-fit:contain; }
+    .toolcard .art.black { background:#000; }
+    .toolcard .art code { padding:0 16px; font-size:19px; font-weight:800; line-height:1.5; text-align:center; }
+    .toolcard h3 { margin-bottom:6px; font-size:25px; }
+    .toolcard p { margin:0 0 10px; color:var(--text-muted); font-size:16px; line-height:1.4; }
+    .toolcard .stat { padding:10px 12px; background:var(--primary-light); border-radius:10px; color:var(--text-dark); font-size:14px; font-weight:750; line-height:1.35; }
+    .toolcard .tag { margin-top:auto; padding-top:10px; color:var(--primary); font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+    body.grid-mode .slide .story,body.grid-mode .slide .levels,body.grid-mode .slide .quick-check,body.grid-mode .slide .toolcards { height:68%; }
+    .bars { display:flex; align-items:flex-end; gap:12px; height:250px; padding:18px 22px 0; }
+    .bar { flex:1; display:flex; flex-direction:column; justify-content:flex-end; align-items:stretch; height:100%; text-align:center; }
+    .bar i { display:block; border-radius:6px 6px 0 0; }
+    .bar i.old { background:#c9d2dc; }
+    .bar i.new { height:22px; background:var(--primary); }
+    .bar span { display:block; padding-top:8px; color:var(--text-muted); font-size:13px; font-weight:800; }
+    .price-row { display:flex; justify-content:space-between; padding:11px 14px; background:var(--bg-light); border-radius:10px; font-size:16px; font-weight:750; }
+    .price-row b { color:var(--primary); }
+    .lever-list { display:grid; gap:10px; margin:0; padding:0; list-style:none; }
+    .lever-list li { padding:12px 14px; background:var(--bg-light); border-radius:10px; font-size:15px; font-weight:700; line-height:1.35; }
+    .code-panel pre.term { font-size:14px; }
+    .code-panel .rows { display:grid; gap:10px; }
+    .code-panel .rows div { padding:12px 14px; background:var(--bg-light); border-radius:10px; font-size:15px; font-weight:700; line-height:1.35; }
+    .code-panel .rows div span { display:block; margin-bottom:3px; color:var(--primary); font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+    .demo-map { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .demo { min-height:158px; padding:18px 18px 16px; background:white; border:1px solid var(--line); border-top:5px solid var(--primary); border-radius:14px; box-shadow:0 8px 22px rgba(15,20,28,.05); }
+    .demo:nth-child(even) { border-top-color:var(--accent); }
+    .demo b { display:flex; justify-content:space-between; margin-bottom:10px; color:var(--primary); font-size:13px; letter-spacing:.08em; text-transform:uppercase; }
+    .demo b em { color:var(--text-muted); font-style:normal; }
+    .demo strong { display:block; margin-bottom:6px; font-size:19px; line-height:1.15; }
+    .demo span { color:var(--text-muted); font-size:14px; line-height:1.35; }
+    body.grid-mode .slide .demo-map { height:68%; }
+    .fragment { opacity:.14; transform:translateY(8px); transition:.2s ease; }
+    .fragment.visible { opacity:1; transform:none; }
+    .notes { display:none; }
+    #progress { position:fixed; z-index:80; left:0; bottom:0; height:4px; width:0; background:var(--primary); transition:width .2s ease; }
+    #controls { position:fixed; z-index:90; right:18px; bottom:18px; display:flex; align-items:center; gap:8px; padding:7px; border-radius:13px; background:rgba(15,20,28,.88); backdrop-filter:blur(10px); transition:.2s ease; }
+    #controls.hidden { opacity:0; pointer-events:none; }
+    #controls button { width:34px; height:34px; border:0; border-radius:8px; background:#283142; color:white; cursor:pointer; font-size:16px; font-weight:900; }
+    #controls button:hover { background:var(--primary); }
+    #counter { min-width:66px; color:white; text-align:center; font-size:12px; font-weight:900; letter-spacing:.06em; }
+    #help { position:fixed; z-index:95; left:18px; bottom:18px; padding:9px 13px; border-radius:10px; background:rgba(15,20,28,.84); color:white; font-size:11px; letter-spacing:.04em; }
+    body.grid-mode { overflow:auto; background:#111722; }
+    body.grid-mode .deck { height:auto; padding:28px; display:block; }
+    body.grid-mode .slide-container { width:auto; height:auto; transform:none !important; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:22px; background:transparent; box-shadow:none; }
+    body.grid-mode .slide { position:relative; display:block; width:100%; height:auto; aspect-ratio:16/9; padding:18px; transform:none; cursor:pointer; box-shadow:0 12px 34px rgba(0,0,0,.3); }
+    body.grid-mode .slide * { pointer-events:none; }
+    body.grid-mode .slide h1,body.grid-mode .slide h2 { font-size:20px; }
+    body.grid-mode .slide h3,body.grid-mode .slide p,body.grid-mode .slide span,body.grid-mode .slide li,body.grid-mode .slide b,body.grid-mode .slide strong { font-size:7px; }
+    body.grid-mode .slide .bridge,body.grid-mode .slide .repo,body.grid-mode .slide .matrix,body.grid-mode .slide .duo,body.grid-mode .slide .diamond-wrap,body.grid-mode .slide .pipeline,body.grid-mode .slide .funnel-wrap,body.grid-mode .slide .platform,body.grid-mode .slide .evidence,body.grid-mode .slide .cta-grid { height:68%; }
+    body.grid-mode #controls,body.grid-mode #progress,body.grid-mode #help { display:none; }
+    #admin { position:fixed; z-index:100; inset:0; display:none; background:rgba(4,7,11,.76); backdrop-filter:blur(12px); }
+    #admin.open { display:grid; place-items:center; }
+    .admin-card { width:min(720px,90vw); padding:30px; border-radius:20px; background:white; box-shadow:var(--shadow); }
+    .admin-card h3 { font-size:26px; }
+    .admin-row { display:flex; flex-wrap:wrap; gap:10px; margin:15px 0 24px; }
+    .admin-row button { padding:10px 14px; border:1px solid var(--line); border-radius:9px; background:var(--bg-light); cursor:pointer; font-weight:800; }
+    .admin-row button:hover { border-color:var(--primary); color:var(--primary); }
+    .shortcuts { display:grid; grid-template-columns:1fr 1fr; gap:10px 22px; color:var(--text-muted); font-size:14px; }
+    .shortcuts b { color:var(--text-dark); }
+    @media (max-width:700px) { #help { display:none; } }
+    @media print {
+      @page { size:13.333in 7.5in; margin:0; }
+      html,body { width:auto; height:auto; overflow:visible; background:white; }
+      .deck { display:block; }
+      .slide-container { width:auto; height:auto; transform:none !important; box-shadow:none; }
+      .slide { position:relative; display:block !important; width:13.333in; height:7.5in; break-after:page; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      .fragment { opacity:1 !important; transform:none !important; }
+      #controls,#progress,#help,#admin { display:none !important; }
+    }
+    .stage em { color:var(--primary); font-style:normal; font-weight:800; }
+    .toolcard code, .repo-card code, .demo code, .footnote code, .sample-note code, .stage code { font-family:"SFMono-Regular",Consolas,monospace; font-size:.92em; }
+    .fixes .toolcard .art { height:56px; }
+    .slide[data-index="16"] .demo { min-height:250px; padding:24px; }
+    .slide[data-index="16"] .demo strong { font-size:24px; margin:30px 0 12px; }
+    .slide[data-index="16"] .demo span { font-size:17px; }
+    .nowyou .cta-grid { height:452px; }
+    .nowyou .next-step { padding:12px 16px; }
+    .nowyou .next-step strong { font-size:16px; }
+    .nowyou .next-step span { font-size:13.5px; }
+    .nowyou .pilot { gap:32px; padding:26px; justify-content:flex-start; }
+    .nowyou .pilot .big { font-size:56px; line-height:1; }
+    .nowyou .pilot h3 { margin:0 0 4px; color:white; font-size:16px; letter-spacing:.06em; text-transform:uppercase; }
+    .nowyou .pilot p { font-size:15px; line-height:1.4; }
+    .nowyou .pilot code { color:#ffd2c4; font-size:13.5px; }
+    .nowyou .eyebrow em { color:var(--text-muted); font-style:normal; }
+    .placeholder { display:inline-block; padding:1px 7px; border:1px dashed var(--primary); border-radius:6px; color:var(--primary); font-weight:800; }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <div class="slide-container" id="stage">
+      <section class="slide dark active" data-index="01" data-title="Skills that work together">
+        <div class="brand-mark"><i></i>Palo Alto Networks workshop · Part 2</div>
+        <div style="position:absolute;left:68px;top:188px;z-index:2">
+          <p class="eyebrow">Intro · 15 minutes, then hands on keyboards</p>
+          <h1>Skills that<br>work <span class="accent">together</span></h1>
+          <p class="lead">From single skills to your own ticket-to-PR workflow, inside Palo Alto's rules.</p>
+        </div>
+        <div class="hero-orbit"></div><div class="hero-node"></div>
+        <div class="meta">TTPSC · Part 2 of 2</div>
+        <aside class="notes">Fifteen minutes of slides, then the rest of the day is building. Everything on these slides is something they will use in the next hour, so keep it brisk. Promise: by the end they run their own pipeline on a real Jira ticket.</aside>
+      </section>
+
+      <section class="slide dark" data-index="02" data-title="Questions about Part 1">
+        <div class="qa"><div><p class="eyebrow">Before we start</p><h2>Any questions about Part 1?</h2><p class="lead">Caveman, Ponytail, or anything you have tried since.</p></div><div class="qa-card"><div class="qmark">?</div></div></div>
+        <div class="meta">Skills that work together · Part 2</div>
+        <aside class="notes">Give it 2 to 3 minutes. Note anything that touches today's builds and come back to it there; park longer questions for the wrap-up so the intro still ends at 0:15.</aside>
+      </section>
+
+      <section class="slide white" data-index="03" data-title="Where Part 1 left off">
+        <div class="section-head"><div><p class="eyebrow">Recap</p><h2>Part 1 used skills one at a time</h2></div><p>Today the skills call each other, and you write the one that calls them.</p></div>
+        <div class="duo">
+          <article class="mode-card panel fragment"><div class="sample-label">Part 1</div><h3>Single skills, run by hand</h3>
+            <ul class="lever-list" style="margin-top:20px"><li>Caveman: short reports that keep the evidence</li><li>Ponytail: the smallest correct fix</li></ul>
+            <p class="sample-note">You were the orchestrator.</p></article>
+          <article class="mode-card panel fragment"><div class="sample-label">Part 2</div><h3>Composed skills, one entry point</h3>
+            <ul class="lever-list" style="margin-top:20px"><li>Public skills, adapted to our rules</li><li>Skills that invoke other skills and subagents</li><li>One <code>ticket-to-pr</code> skill you write and own</li></ul>
+            <p class="sample-note">The skill is the orchestrator. You approve and review.</p></article>
+        </div>
+        <aside class="notes">Ask who still uses Caveman and Ponytail daily (the team said they do). The step up today: instead of typing five commands, they encode the sequence, the gates, and the gotchas in one skill.</aside>
+      </section>
+
+      <section class="slide" data-index="04" data-title="What a skill is">
+        <div class="section-head"><div><p class="eyebrow">Anatomy</p><h2>A skill is a folder of Markdown</h2></div><p>Only the description is always in context. The rest loads when the skill runs.</p></div>
+        <div class="repo">
+          <div class="tree">
+            <div class="root">.claude/skills/</div>
+            <div class="hot">&nbsp;&nbsp;to-spec/</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md</div>
+            <div class="hot">&nbsp;&nbsp;tdd/</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md</div>
+            <div class="cool">&nbsp;&nbsp;&nbsp;&nbsp;tests.md</div>
+            <div class="cool">&nbsp;&nbsp;&nbsp;&nbsp;mocking.md</div>
+            <div class="hot">&nbsp;&nbsp;ticket-to-pr/</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md</div>
+          </div>
+          <div class="repo-cards">
+            <article class="repo-card panel fragment"><h3>Frontmatter</h3><p><code>name</code>, <code>description</code> (when to trigger), optional <code>model</code> and <code>disable-model-invocation</code>.</p></article>
+            <article class="repo-card panel fragment"><h3>Body</h3><p>Goal, process, stop conditions. State goals, not keystrokes.</p></article>
+            <article class="repo-card panel fragment"><h3>Reference files</h3><p>Detail the body links to, loaded only when needed: <code>tests.md</code>, templates, checklists.</p></article>
+            <article class="repo-card panel fragment"><h3>Gotchas</h3><p>The most valuable lines. Each one is a failure you saw and never want again.</p></article>
+          </div>
+        </div>
+        <aside class="notes">Everything here is plain Markdown, which is why it fits Palo Alto's rules: no runtime, no installer. Point out reference files: tdd keeps its long guidance in tests.md and mocking.md so the main file stays short.</aside>
+      </section>
+
+      <section class="slide white" data-index="05" data-title="Two ways a skill starts">
+        <div class="section-head"><div><p class="eyebrow">Invocation</p><h2>Two ways a skill starts</h2></div></div>
+        <div class="duo">
+          <article class="mode-card panel fragment"><div class="sample-label">Model-invoked</div><h3>Claude picks it when the task matches</h3>
+            <pre>description: Diagnosis loop for hard bugs.
+  Use when the user says "debug this",
+  or reports something failing.</pre>
+            <p class="sample-note">Examples: <code>tdd</code>, <code>code-review</code>, <code>diagnosing-bugs</code>, <code>pr</code>. The description is a trigger, so write it as conditions.</p></article>
+          <article class="mode-card panel fragment"><div class="sample-label">User-invoked</div><h3>Runs only when you type it</h3>
+            <pre>disable-model-invocation: true
+
+/mattpocock-skills:to-spec</pre>
+            <p class="sample-note">Examples: <code>to-spec</code>, <code>implement</code>, <code>grill-me</code>. Use it for steps with side effects or a human gate. They do not show in Claude's skill list, so type the name.</p></article>
+        </div>
+        <aside class="notes">This explains the most common "the install is broken" moment: after installing Matt's plugin, only the model-invoked skills are listed. The pipeline skills are there; type /mattpocock-skills: and the completion shows them. Our ticket-to-pr skill will be user-invoked too.</aside>
+      </section>
+
+      <section class="slide white" data-index="06" data-title="What skills make possible">
+        <div class="section-head"><div><p class="eyebrow">Beyond one prompt</p><h2>What skills make possible</h2></div><p>Six capabilities we combine in today's pipeline.</p></div>
+        <div class="toolcards" style="grid-template-rows:1fr 1fr;height:430px">
+          <article class="toolcard panel fragment"><h3>Call other skills</h3><p>"Call the Skill tool with <code>tdd</code>." Small skills compose into flows.</p><span class="tag">implement → tdd → code-review</span></article>
+          <article class="toolcard panel fragment"><h3>Fresh subagents</h3><p>A phase runs in a clean context, so the spec, not the chat, is the contract.</p><span class="tag">implementer, two reviewers</span></article>
+          <article class="toolcard panel fragment"><h3>Shared config</h3><p>One file says where tickets live. Every skill reads it instead of guessing.</p><span class="tag">docs/agents/issue-tracker.md</span></article>
+          <article class="toolcard panel fragment"><h3>Connectors</h3><p>Pull the ticket from Jira through the Claude connector. Paste when it is not there.</p><span class="tag">Jira connector</span></article>
+          <article class="toolcard panel fragment"><h3>Approval gates</h3><p>Stop after the spec; stop on a red build or an open blocker. No silent continuation.</p><span class="tag">human in the loop</span></article>
+          <article class="toolcard panel fragment"><h3>Team gotchas</h3><p>MSVC 19.16, no C++20, name the architecture. Written once, applied every run.</p><span class="tag">Gotchas section</span></article>
+        </div>
+        <aside class="notes">Each card maps to a stage of what they will build. Do not go deep; they will meet each one in Build 2.</aside>
+      </section>
+
+      <section class="slide white" data-index="07" data-title="Matt Pocock's skills">
+        <div class="section-head"><div><p class="eyebrow">Public skill set · MIT license</p><h2>Matt Pocock's skills, as a map</h2></div><p>Small, composable, model-agnostic. Installed as the <code>mattpocock-skills</code> plugin.</p></div>
+        <div class="demo-map" style="grid-template-columns:repeat(5,1fr)">
+          <article class="demo fragment"><b>Plan</b><strong>grill-me · to-spec · to-tickets</strong><span>Interview until the ticket is sharp, write the spec, slice it into tickets.</span></article>
+          <article class="demo fragment"><b>Build</b><strong>implement · tdd</strong><span>Red-green at seams you agreed first. Vertical slices, not all tests up front.</span></article>
+          <article class="demo fragment"><b>Check</b><strong>code-review</strong><span>Two blind reviewers: Standards (repo rules) and Spec (did it do what was asked).</span></article>
+          <article class="demo fragment"><b>Debug</b><strong>diagnosing-bugs</strong><span>Red feedback loop first, then ranked falsifiable hypotheses, then a regression test.</span></article>
+          <article class="demo fragment"><b>Ship &amp; docs</b><strong>pr · grill-with-docs</strong><span>PR body with evidence and merge danger. Glossary and ADRs written as you go.</span></article>
+        </div>
+        <p class="footnote fragment">Another Palo Alto team already runs these, adapted so they make no external calls. Other vetted sources (Superpowers, HumanLayer, Anthropic's official plugins) are in <code>SKILL-SOURCES.md</code>.</p>
+        <aside class="notes">Answer the team's question about other legal sources briefly: the list with licenses is in SKILL-SOURCES.md. Debug and docs are the two extensions in Build 3.</aside>
+      </section>
+
+      <section class="slide white" data-index="08" data-title="How the skills chain">
+        <div class="section-head"><div><p class="eyebrow">Composition, in the source</p><h2>How one skill calls the next</h2></div></div>
+        <div class="story">
+          <article class="code-panel panel fragment"><div class="label">implement/SKILL.md (excerpt)</div><pre>Implement the work described by the user
+in the spec or tickets.
+
+<span class="ok">Call the Skill tool with "tdd"</span> where
+possible, at pre-agreed seams.
+
+Run the full test suite once at the end.
+
+Once done, <span class="ok">call the Skill tool with
+"code-review"</span> to review the work.</pre></article>
+          <article class="code-panel panel fragment"><div class="label">code-review/SKILL.md (excerpt)</div><pre>Two-axis review of the diff:
+- <span class="ok">Standards</span>: does it follow the repo's
+  documented coding standards?
+- <span class="ok">Spec</span>: does it implement the issue?
+
+Both run as <span class="ok">parallel sub-agents</span>, each
+with a fresh context window.
+
+<span class="dim">The issue tracker should have been
+provided to you.</span></pre></article>
+        </div>
+        <aside class="notes">Read the green lines aloud. This is the whole trick: plain sentences that name another skill. Point at the grey line: Matt's skills assume an issue tracker. That is where our adaptation starts.</aside>
+      </section>
+
+      <section class="slide dark" data-index="09" data-title="Our rules">
+        <div class="brand-mark"><i></i>Palo Alto rules</div>
+        <div style="position:absolute;left:68px;top:92px;right:68px">
+          <p class="eyebrow">Non-negotiable for every skill today</p>
+          <h2>Public skills come in. External calls do not.</h2>
+        </div>
+        <div class="evidence" style="position:absolute;left:68px;right:68px;top:240px;height:auto">
+          <div class="evidence-step fragment" style="color:var(--text-dark)"><div class="disc"></div><h3>No unapproved installs</h3><p>Caveman, Ponytail, and the Matt Pocock plugin. Nothing else.</p></div>
+          <div class="evidence-step fragment" style="color:var(--text-dark)"><div class="disc"></div><h3>No network from the agent</h3><p>No curl, wget, gh, npx, or URL fetches inside a skill.</p></div>
+          <div class="evidence-step fragment" style="color:var(--text-dark)"><div class="disc"></div><h3>Plain Markdown only</h3><p>No scripts, hooks, or runtimes in skills you adopt.</p></div>
+          <div class="evidence-step fragment" style="color:var(--text-dark)"><div class="disc"></div><h3>Services via approved routes</h3><p>Jira through the connector, other services through the policy broker <span class="placeholder">TBD</span>, or paste.</p></div>
+        </div>
+        <aside class="notes">Same constraints as Part 1, plus the policy broker rule from the other team. The next three slides are how to make a public skill obey them. Also mention the endpoint policies now in force: no reading .env, secrets, credentials, ~/.ssh, ~/.aws or ./build; curl, wget and WebFetch blocked; managed hooks only; no permission changes. The skills we build already follow them.</aside>
+      </section>
+
+      <section class="slide white" data-index="10" data-title="Adapting a skill: find the calls">
+        <div class="section-head"><div><p class="eyebrow">Adapting a skill · 1 of 3</p><h2>Find everything that leaves the machine</h2></div><p>Search the skill folder before you trust it. Read the hits in context.</p></div>
+        <div class="story">
+          <article class="code-panel panel fragment"><div class="label">Look for</div><pre><span class="bad">curl  wget  http  WebFetch  WebSearch</span>
+<span class="bad">gh   glab   npx   npm   pip   uv</span>
+<span class="bad">*.sh  *.py  *.js  hooks  scripts/</span>
+<span class="dim">"publish to the issue tracker"</span>
+<span class="dim">"fetch the ticket"   "open a PR"</span></pre><p class="note">Phrases matter as much as commands: "publish" makes the agent pick a CLI on its own.</p></article>
+          <article class="code-panel panel fragment"><div class="label">What you will find in Matt's set</div><div class="rows">
+            <div><span>setup-matt-pocock-skills</span><code>gh</code> / <code>glab</code> repo checks and label creation</div>
+            <div><span>to-spec · to-tickets · implement</span>"Publish to" and "fetch from" the issue tracker</div>
+            <div><span>diagnosing-bugs</span>curl and Playwright loops; a bash HITL template</div>
+            <div><span>research · wizard</span>Web sources; generated bash scripts. Skip both.</div></div></article>
+        </div>
+        <aside class="notes">This list goes into adapt-skill in Build 1. Most hits are not malicious, just written for an open environment. The issue-tracker phrases are the subtle ones.</aside>
+      </section>
+
+      <section class="slide white" data-index="11" data-title="Adapting a skill: three fixes">
+        <div class="section-head"><div><p class="eyebrow">Adapting a skill · 2 of 3</p><h2>Every hit gets one of three fixes</h2></div></div>
+        <div class="toolcards fixes" style="height:auto">
+          <article class="toolcard panel fragment"><div class="art"><code>Route</code></div><h3>Through an approved route</h3><p>Ticket reads go through the Jira connector. Other services go through the policy broker: <span class="placeholder">TBD: how Claude reaches it</span></p><span class="tag">"fetch the ticket" → Jira connector</span></article>
+          <article class="toolcard panel fragment"><div class="art"><code>Replace</code></div><h3>With a local file or a paste</h3><p>The spec becomes <code>.scratch/&lt;id&gt;/spec.md</code>. No connector? Ask the user to paste the ticket.</p><span class="tag">"publish" → write a local file</span></article>
+          <article class="toolcard panel fragment"><div class="art"><code>Delete</code></div><h3>When nothing approved can do it</h3><p>Drop the curl loop and the bash template. Keep the idea: a failing test is the feedback loop.</p><span class="tag">curl / .sh → removed</span></article>
+        </div>
+        <div class="code-panel panel fragment" style="margin-top:18px;padding:16px 22px"><pre style="font-size:14px">docs/agents/issue-tracker.md  →  Tickets come from Jira via the Claude connector. If it is unavailable, ask the user to paste the ticket and save it to .scratch/&lt;ticket-id&gt;/ticket.md. Specs and sub-tickets are local Markdown under .scratch/. Never call gh, glab, or a web API.</pre></div>
+        <aside class="notes">The one config file fixes most of Matt's set at once, because every tracker-aware skill reads it. That is the advantage of composable skills: one adaptation point.</aside>
+      </section>
+
+      <section class="slide white" data-index="12" data-title="Adapting a skill: where it lives">
+        <div class="section-head"><div><p class="eyebrow">Adapting a skill · 3 of 3</p><h2>Adapted skills live in your project</h2></div><p>Never edit the plugin's files: it updates itself and overwrites them.</p></div>
+        <div class="repo">
+          <div class="tree">
+            <div class="root">your-repo/.claude/skills/</div>
+            <div class="hot">&nbsp;&nbsp;pa-to-spec/</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;SKILL.md</div>
+            <div class="cool">&nbsp;&nbsp;&nbsp;&nbsp;SOURCE.md</div>
+            <div class="cool">&nbsp;&nbsp;&nbsp;&nbsp;LICENSE</div>
+            <div class="hot">&nbsp;&nbsp;pa-implement/</div>
+            <div class="hot">&nbsp;&nbsp;pa-code-review/</div>
+            <div class="root">your-repo/docs/agents/</div>
+            <div>&nbsp;&nbsp;issue-tracker.md</div>
+          </div>
+          <div class="repo-cards">
+            <article class="repo-card panel fragment"><h3>New name</h3><p><code>pa-to-spec</code>, not <code>to-spec</code>, so you always know which version ran.</p></article>
+            <article class="repo-card panel fragment"><h3>SOURCE.md</h3><p>Upstream repository, commit, license, and a list of what you changed.</p></article>
+            <article class="repo-card panel fragment"><h3>Keep the license</h3><p>MIT asks only that the notice travels with the copy.</p></article>
+            <article class="repo-card panel fragment"><h3>Review upstream</h3><p>The plugin auto-updates. Diff new versions before you port changes in.</p></article>
+          </div>
+        </div>
+        <aside class="notes">Inside a pa- skill, calls to other skills should point at the pa- versions too, or the chain silently falls back to the unadapted originals. That is a gotcha worth writing down.</aside>
+      </section>
+
+      <section class="slide white" data-index="13" data-title="What we will build">
+        <div class="section-head"><div><p class="eyebrow">Today's target</p><h2>Your own ticket-to-PR pipeline</h2></div><p>One user-invoked skill. Five stages. Two hard stops.</p></div>
+        <div class="pipeline">
+          <article class="stage fragment"><b>1 · Ticket</b><strong>Jira connector</strong><span>Paste as fallback. Saved to <code>.scratch/</code>.</span></article>
+          <article class="stage fragment"><b>2 · Spec</b><strong>pa-to-spec</strong><span>grill-me if criteria are vague. <em>Stop for approval.</em></span></article>
+          <article class="stage fragment"><b>3 · Implement</b><strong>pa-implement</strong><span>Fresh subagent, tdd at agreed seams.</span></article>
+          <article class="stage fragment"><b>4 · Validate</b><strong>build.bat + review</strong><span>Compiler and arch named. Blind pa-code-review. <em>Stop if red.</em></span></article>
+          <article class="stage fragment"><b>5 · PR body</b><strong>pr</strong><span>Evidence table, targets not run, findings and decisions.</span></article>
+        </div>
+        <p class="footnote fragment">Extensions in Build 3: route bug tickets through <code>pa-diagnosing-bugs</code>, or build a documentation skill the pipeline calls.</p>
+        <aside class="notes">This is Part 1's Demo 07 loop, rebuilt from public parts. Where the team's internal marketplace has a better tool for a stage (review, PR creation), the skill names it and keeps the public skill as fallback.</aside>
+      </section>
+
+      <section class="slide white" data-index="14" data-title="Docs that cannot drift">
+        <div class="section-head"><div><p class="eyebrow">Build 3, option B</p><h2>Documentation written from code, checked against code</h2></div><p>A <code>document-module</code> skill you build. Read-only on code, no network.</p></div>
+        <div class="toolcards" style="height:auto">
+          <article class="toolcard panel fragment"><div class="art" style="height:56px"><code>1 · Research</code></div><h3>How it works today</h3><p>Headers state facts. Every claim cites <code>file:line</code>. Units and integer widths named. No "should".</p><span class="tag">pattern: HumanLayer rpi · MIT</span></article>
+          <article class="toolcard panel fragment"><div class="art" style="height:56px"><code>2 · Terms</code></div><h3>Glossary and ADRs</h3><p><code>rsz</code> becomes <b>Record size</b>. Decisions a newcomer would question get an ADR; unknown reasons say so.</p><span class="tag">mattpocock-skills:domain-modeling</span></article>
+          <article class="toolcard panel fragment"><div class="art" style="height:56px"><code>3 · Fact-check</code></div><h3>A fresh reader verifies</h3><p>Each claim: verified, wrong, or unsupported, with the proving line. Wrong ones are fixed, unsupported ones removed.</p><span class="tag">fresh subagent · table kept in the doc</span></article>
+        </div>
+        <div class="code-panel panel fragment" style="margin-top:18px;padding:16px 22px"><pre style="font-size:14px"><span class="bad"><s>Offsets are 64-bit on every platform</s></span>   wrong: src/record_file.cpp:6 multiplies in long
+<span class="ok">Record offsets are header + index × size, multiplied in long (32-bit on Windows)</span></pre></div>
+        <aside class="notes">This answers the team's request for documentation skills. The fact-check is the point: a confident doc that is wrong is worse than none. In the sample, the check removes "offsets are 64-bit" and the corrected sentence exposes the Windows bug from option A. The pipeline then calls the skill on changed files, so docs move with the code.</aside>
+      </section>
+
+      <section class="slide white" data-index="15" data-title="The skeleton you start from">
+        <div class="section-head"><div><p class="eyebrow">Starting point</p><h2>The skeleton you start from</h2></div><p>Headings only. You fill it in, run it, and fix it.</p></div>
+        <div class="story">
+          <article class="code-panel panel fragment"><div class="label">.claude/skills/ticket-to-pr/SKILL.md</div><pre class="term">---
+name: ticket-to-pr
+description: Take one ticket from Jira (or a paste)
+  to a validated change and a PR description.
+disable-model-invocation: true
+---
+# Ticket to PR
+Goal: ...
+## 1. Ticket     ## 2. Spec (stop: approval)
+## 3. Implement  ## 4. Validate (stop: red build)
+## 5. PR body
+## Gotchas
+- C++17 only; MSVC 19.16. Name the architecture.</pre></article>
+          <article class="code-panel panel fragment"><div class="label">Questions each section must answer</div><div class="rows">
+            <div><span>Ticket</span>Where does it come from, and where is it saved?</div>
+            <div><span>Spec / Implement</span>Which skill runs, on which model, in which context?</div>
+            <div><span>Validate</span>Which command proves it, and what blocks the PR?</div>
+            <div><span>PR body</span>What evidence must be in it?</div>
+            <div><span>Gotchas</span>Every failure from today, one line each.</div></div></article>
+        </div>
+        <aside class="notes">Leave this slide up during Build 2. Encourage them to run the skill after each section they write, not at the end.</aside>
+      </section>
+
+      <section class="slide white" data-index="16" data-title="Today's plan">
+        <div class="section-head"><div><p class="eyebrow">The next 2 hours 45 minutes</p><h2>Four build blocks, one workflow</h2></div></div>
+        <div class="demo-map">
+          <article class="demo fragment"><b>Build 1<em>0:15</em></b><strong>Adapt the skills</strong><span>Write adapt-skill; Claude adapts five skills; you review.</span></article>
+          <article class="demo fragment"><b>Build 2<em>0:45</em></b><strong>Pipeline skeleton</strong><span>Write ticket-to-pr, run it on the sample ticket.</span></article>
+          <article class="demo fragment"><b>Build 3<em>1:30</em></b><strong>Extend it</strong><span>Bug-analysis branch or a documentation skill.</span></article>
+          <article class="demo fragment"><b>Build 4<em>2:00</em></b><strong>Real ticket</strong><span>Your Jira, your repo. Pairs review each other.</span></article>
+        </div>
+        <p class="footnote fragment">Break at 1:20. Share-out and <code>/retro</code> at 2:45.</p>
+        <aside class="notes">Times are minutes into the workshop. Build 4 is the payoff; if anything overruns, shorten Build 3.</aside>
+      </section>
+
+      <section class="slide dark" data-index="17" data-title="Hands on keyboards">
+        <div class="qa">
+          <div><p class="eyebrow">Build 1 starts now</p><h2>Hands on keyboards</h2>
+            <div class="code-panel" style="padding:0;margin-top:10px"><pre style="font-size:17px">/plugin                          <span class="dim"># mattpocock-skills enabled?</span>
+/mattpocock-skills:to-spec       <span class="dim"># typed skills appear</span>
+<span class="ok">copy skeleton\adapt-skill, fill it in, run it</span></pre></div></div>
+          <div class="qa-card"><div class="qmark">→</div></div>
+        </div>
+        <div class="meta">Skills that work together · Part 2</div>
+        <aside class="notes">Keep slides 10 to 12 one click away during Build 1. Instructor's adapted copies are the fallback if someone gets stuck.</aside>
+      </section>
+      <section class="slide white nowyou" data-index="18" data-title="Now you: Build 1">
+        <div class="section-head" style="margin-bottom:20px"><div><p class="eyebrow">Now you · Build 1 <em>· 0:15–0:45</em></p><h2>Have Claude Code adapt the five skills</h2></div></div>
+        <div class="cta-grid">
+          <div class="steps"><div class="next-step fragment"><b>1</b><div><strong>Check the plugin, write the tracker config</strong><span><code>/plugin</code> shows mattpocock-skills. Ask Claude to write docs/agents/issue-tracker.md: Jira read-only, .scratch/&lt;ticket-id&gt;/ paths, never gh.</span></div></div><div class="next-step fragment"><b>2</b><div><strong>Write adapt-skill</strong><span>Copy skeleton\adapt-skill into .claude\skills. Fill in: local source and license, audit with slide 10's list, route / replace / delete, stop for approval.</span></div></div><div class="next-step fragment"><b>3</b><div><strong>Run it on five skills</strong><span><code>/adapt-skill &lt;folder&gt;</code> in order: code-review, implement and to-spec (--callable), diagnosing-bugs, pr (add evidence rules). tdd stays as it is.</span></div></div><div class="next-step fragment"><b>4</b><div><strong>Review the diff yourself</strong><span>AUDIT-WORKSHEET.md: what did it miss? Fix adapt-skill, not only the output, and run it again.</span></div></div><div class="next-step fragment"><b>5</b><div><strong>Check</strong><span><code>/skills</code> lists five pa- skills; each points at issue-tracker.md; "how would pa-to-spec publish?" gives a file path.</span></div></div></div>
+          <aside class="pilot"><div class="big">30 min</div><div><h3>Done when</h3><p>adapt-skill, five pa- skills and issue-tracker.md exist; a search finds no curl, gh, http, or .sh; you fixed one thing adapt-skill missed.</p></div><div><h3>Steps</h3><p><code>part-2/build-1-adapt/README.md</code></p></div></aside>
+        </div>
+        <aside class="notes">Meet: show this slide, paste the Build 1 chat message, stop sharing. Before this slide: screen-share 3 minutes: run the reference adapt-skill on diagnosing-bugs and stop at its findings table. Leave this slide up for the whole block. Check in with people by voice during the block. Recap at 0:43: one finding most people missed, and why disable-model-invocation matters for Build 2.</aside>
+      </section>
+
+      <section class="slide white nowyou" data-index="19" data-title="Now you: Build 2">
+        <div class="section-head" style="margin-bottom:20px"><div><p class="eyebrow">Now you · Build 2 <em>· 0:45–1:20</em></p><h2>Write ticket-to-pr and run it on NET-1502</h2></div></div>
+        <div class="cta-grid">
+          <div class="steps"><div class="next-step fragment"><b>1</b><div><strong>Get ready</strong><span>In build-2-pipeline: <code>build.bat</code> (9 pass), copy your pa- skills and docs/ in, copy skeleton\ticket-to-pr into .claude\skills.</span></div></div><div class="next-step fragment"><b>2</b><div><strong>Fill in the five stages</strong><span>Ticket, spec (stop: approval), implement in a fresh subagent, validate (stop: red), PR body. Goals and stops, not keystrokes.</span></div></div><div class="next-step fragment"><b>3</b><div><strong>Run it</strong><span><code>/ticket-to-pr TICKET.md</code>. When a stage goes wrong, fix the skill and add a Gotcha.</span></div></div><div class="next-step fragment"><b>4</b><div><strong>Check it yourself</strong><span>Run build.bat, open the diff, find the test behind two acceptance criteria.</span></div></div><div class="next-step fragment"><b>5</b><div><strong>Read the PR body</strong><span>.scratch/NET-1502/pr.md: is anything claimed that no output shows?</span></div></div></div>
+          <aside class="pilot"><div class="big">35 min</div><div><h3>Done when</h3><p>pr.md exists with a green build (compiler and architecture named), or the skill stopped with a clear reason. At least three Gotchas.</p></div><div><h3>Steps</h3><p><code>part-2/build-2-pipeline/README.md</code></p></div></aside>
+        </div>
+        <aside class="notes">Meet: show this slide, paste the Build 2 chat message, stop sharing. Before this slide: screen-share copying the skeleton and the first /ticket-to-pr run, about 3 minutes, and let it fail if it fails. At 1:10 share your screen again and show the reference skill from instructor/build-2-pipeline/ticket-to-pr. Recap at 1:18: the most common first failure and the Gotcha that fixed it.</aside>
+      </section>
+
+      <section class="slide dark" data-index="20" data-title="Break">
+        <div class="qa"><div><p class="eyebrow">1:20–1:30</p><h2>Break</h2><p class="lead">Back at 1:30 for Build 3: bug analysis or a documentation skill. Decide which while you get coffee.</p></div><div class="qa-card"><div class="qmark">10</div></div></div>
+        <div class="meta">Skills that work together · Part 2</div>
+        <aside class="notes">Remind people their skills live in build-2-pipeline/.claude; they copy them into build-3-extend after the break.</aside>
+      </section>
+
+      <section class="slide white nowyou" data-index="21" data-title="Now you: Build 3">
+        <div class="section-head" style="margin-bottom:20px"><div><p class="eyebrow">Now you · Build 3 <em>· 1:30–2:00 · pick A or B</em></p><h2>Extend the pipeline</h2></div></div>
+        <div class="cta-grid">
+          <div class="steps"><div class="next-step fragment"><b>1</b><div><strong>Get ready</strong><span>In build-3-extend: <code>build.bat</code> (7 pass); copy your .claude and docs from Build 2.</span></div></div><div class="next-step fragment"><b>2</b><div><strong>A · Bug tickets</strong><span>In stage 1 of ticket-to-pr, route bugs through pa-diagnosing-bugs first; save .scratch/&lt;id&gt;/analysis.md.</span></div></div><div class="next-step fragment"><b>3</b><div><strong>A · Run it</strong><span><code>/ticket-to-pr BUG-TICKET.md</code>. No hypotheses before a red test. Linux stays green: say so.</span></div></div><div class="next-step fragment"><b>4</b><div><strong>B · Build document-module</strong><span>Copy skeleton\document-module; fill in research (file:line), terms (domain-modeling), fresh fact-check.</span></div></div><div class="next-step fragment"><b>5</b><div><strong>B · Run and hook it</strong><span><code>/document-module src/record_file.cpp</code>, then add a Docs stage to ticket-to-pr.</span></div></div></div>
+          <aside class="pilot"><div class="big">30 min</div><div><h3>Done when</h3><p>A: analysis.md with a test that goes red, then green. B: docs/modules/record_file.md with a fact-check table, plus GLOSSARY.md.</p></div><div><h3>Steps</h3><p><code>part-2/build-3-extend/README.md</code></p></div></aside>
+        </div>
+        <aside class="notes">Meet: show this slide, paste the Build 3 chat message, stop sharing. Before this slide: 2 minutes on slide 14 for option B, and the Linux-green, Windows-red point for option A. Recap at 1:58: one person from each option says what their skill caught.</aside>
+      </section>
+
+      <section class="slide white nowyou" data-index="22" data-title="Now you: Build 4">
+        <div class="section-head" style="margin-bottom:20px"><div><p class="eyebrow">Now you · Build 4 <em>· 2:00–2:45</em></p><h2>Run your pipeline on a real ticket</h2></div></div>
+        <div class="cta-grid">
+          <div class="steps"><div class="next-step fragment"><b>1</b><div><strong>Pick a ticket</strong><span>Small, one component, a reproducible check, no schema or public API change.</span></div></div><div class="next-step fragment"><b>2</b><div><strong>Move your skills in</strong><span>Copy .claude/skills (pa-*, ticket-to-pr, document-module) and docs/agents into your repository.</span></div></div><div class="next-step fragment"><b>3</b><div><strong>Teach it your repo</strong><span>Add your real build and test command to the Gotchas and to CLAUDE.md.</span></div></div><div class="next-step fragment"><b>4</b><div><strong>Run it</strong><span><code>/ticket-to-pr &lt;JIRA-KEY&gt;</code>. Approve the spec only if you would hand it to a colleague.</span></div></div><div class="next-step fragment"><b>5</b><div><strong>Pair review at 2:30</strong><span>In a breakout room, share screens: spec against ticket, diff against spec, evidence against real output.</span></div></div></div>
+          <aside class="pilot"><div class="big">45 min</div><div><h3>Done when</h3><p>.scratch/&lt;id&gt;/pr.md with a filled evidence table, and a list of skill fixes. Nobody pushes from the pipeline.</p></div><div><h3>Steps</h3><p><code>part-2/build-4-real-ticket/README.md</code></p></div></aside>
+        </div>
+        <aside class="notes">Meet: show this slide, paste the Build 4 chat message, stop sharing. No demo here; spend the first 5 minutes helping people pick tickets in chat. At 2:30 open breakout rooms in pairs (Meet: Activities, Breakout rooms) and bring everyone back at 2:44. Recap is the wrap-up.</aside>
+      </section>
+
+      <section class="slide white" data-index="23" data-title="Wrap-up">
+        <div class="section-head"><div><p class="eyebrow">2:45–3:00</p><h2>What we keep</h2></div></div>
+        <div class="evidence" style="height:auto">
+          <div class="evidence-step fragment"><div class="disc"></div><h3>Show</h3><p>Two or three people share their screen and show their pipeline and one Gotcha everyone should have.</p></div>
+          <div class="evidence-step fragment"><div class="disc"></div><h3>/retro</h3><p>Run it on your Build 4 session. Post one environment fix it suggested in chat.</p></div>
+          <div class="evidence-step fragment"><div class="disc"></div><h3>Keep</h3><p>Which pa- skills and which pipeline stages go into the team's repos.</p></div>
+          <div class="evidence-step fragment"><div class="disc"></div><h3>Owner</h3><p>Who publishes them through the internal marketplace, next to the other team's adapted set.</p></div>
+        </div>
+        <aside class="notes">End with a named owner and a date. Collect the Gotchas people mention; they are the most valuable output of the day.</aside>
+      </section>
+
+    </div>
+  </main>
+
+  <div id="progress"></div>
+  <div id="help">←/→ navigate · G grid · T theme · F full screen · H controls · Alt+A admin</div>
+  <nav id="controls" aria-label="Presentation controls"><button id="prev" aria-label="Previous slide">‹</button><span id="counter">01 / 23</span><button id="next" aria-label="Next slide">›</button></nav>
+
+  <div id="admin" aria-hidden="true">
+    <section class="admin-card">
+      <p class="eyebrow">Presentation admin</p><h3>Display and export</h3>
+      <div class="admin-row"><button data-theme-choice="paloalto">Palo Alto</button><button data-theme-choice="ocean">Ocean</button><button data-theme-choice="forest">Forest</button><button data-theme-choice="mono">Mono</button><button id="printDeck">Print / PDF</button><button id="closeAdmin">Close</button></div>
+      <div class="shortcuts"><span><b>← / →</b> navigate</span><span><b>Space</b> reveal fragment</span><span><b>G</b> grid view</span><span><b>F</b> full screen</span><span><b>H</b> hide controls</span><span><b>T</b> cycle themes</span><span><b>Home / End</b> first / last</span><span><b>Alt+A</b> admin panel</span></div>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const stage = document.getElementById('stage');
+      const progress = document.getElementById('progress');
+      const counter = document.getElementById('counter');
+      const controls = document.getElementById('controls');
+      const admin = document.getElementById('admin');
+      const themes = ['paloalto','ocean','forest','mono'];
+      let index = 0;
+
+      function fit() {
+        if (document.body.classList.contains('grid-mode')) return;
+        const scale = Math.min(innerWidth / 1280, innerHeight / 720);
+        stage.style.transform = `scale(${scale})`;
+      }
+      function fragments(slide = slides[index]) { return [...slide.querySelectorAll('.fragment')]; }
+      function show(next) {
+        index = Math.max(0, Math.min(slides.length - 1, next));
+        slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+        fragments().forEach(item => item.classList.remove('visible'));
+        counter.textContent = `${String(index + 1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
+        progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+        document.title = `${slides[index].dataset.title} · Part 2 workshop`;
+        history.replaceState(null, '', `#${index + 1}`);
+      }
+      function forward() {
+        const hidden = fragments().find(item => !item.classList.contains('visible'));
+        if (hidden) hidden.classList.add('visible'); else show(index + 1);
+      }
+      function back() {
+        const visible = fragments().filter(item => item.classList.contains('visible'));
+        if (visible.length) visible.at(-1).classList.remove('visible'); else show(index - 1);
+      }
+      function toggleGrid(force) {
+        const on = typeof force === 'boolean' ? force : !document.body.classList.contains('grid-mode');
+        document.body.classList.toggle('grid-mode', on);
+        stage.style.transform = '';
+        if (!on) fit();
+      }
+      function cycleTheme() {
+        const current = document.documentElement.dataset.theme;
+        document.documentElement.dataset.theme = themes[(themes.indexOf(current) + 1) % themes.length];
+      }
+      function toggleAdmin(force) {
+        const open = typeof force === 'boolean' ? force : !admin.classList.contains('open');
+        admin.classList.toggle('open', open); admin.setAttribute('aria-hidden', String(!open));
+      }
+      document.getElementById('prev').addEventListener('click', back);
+      document.getElementById('next').addEventListener('click', forward);
+      document.getElementById('closeAdmin').addEventListener('click', () => toggleAdmin(false));
+      document.getElementById('printDeck').addEventListener('click', () => window.print());
+      document.querySelectorAll('[data-theme-choice]').forEach(button => button.addEventListener('click', () => { document.documentElement.dataset.theme = button.dataset.themeChoice; }));
+      slides.forEach((slide, i) => slide.addEventListener('click', () => { if (document.body.classList.contains('grid-mode')) { toggleGrid(false); show(i); } }));
+      addEventListener('resize', fit);
+      addEventListener('keydown', event => {
+        if (event.altKey && event.key.toLowerCase() === 'a') { event.preventDefault(); toggleAdmin(); return; }
+        if (admin.classList.contains('open') && event.key === 'Escape') { toggleAdmin(false); return; }
+        if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') { event.preventDefault(); forward(); }
+        if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); back(); }
+        if (event.key === 'Home') show(0);
+        if (event.key === 'End') show(slides.length - 1);
+        if (event.key.toLowerCase() === 'g') toggleGrid();
+        if (event.key === 'Escape' && document.body.classList.contains('grid-mode')) toggleGrid(false);
+        if (event.key.toLowerCase() === 'h') controls.classList.toggle('hidden');
+        if (event.key.toLowerCase() === 't') cycleTheme();
+        if (event.key.toLowerCase() === 'f') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      });
+      index = Math.max(0, Math.min(slides.length - 1, Number(location.hash.slice(1) || 1) - 1));
+      fit(); show(index);
+    })();
+  </script>
+</body>
+</html>
