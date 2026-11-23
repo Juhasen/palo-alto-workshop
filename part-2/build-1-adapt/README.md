@@ -1,6 +1,6 @@
 # Build 1 — Have Claude Code adapt the skills you will use (30 min)
 
-**Goal:** write an `adapt-skill` skill that holds Palo Alto's rules, run it on four of Matt Pocock's skills, and review what it changed. You leave with four `pa-*` project skills, one `docs/agents/issue-tracker.md`, and a tool you can run on the next public skill you want to use.
+**Goal:** write an `adapt-skill` skill that holds Palo Alto's rules, run it on five of Matt Pocock's skills, and review what it changed. You leave with five `pa-*` project skills, one `docs/agents/issue-tracker.md`, and a tool you can run on the next public skill you want to use.
 
 Claude Code does the editing. Your job is the rules and the review: you approve the findings before anything is written, and you check the result yourself.
 
@@ -43,9 +43,9 @@ Fill in each section of `.claude/skills/adapt-skill/SKILL.md`. Write goals and s
 - **Write:** `.claude/skills/pa-<name>/` with `SKILL.md` (renamed, approved fixes only, a "Palo Alto rules" section), `SOURCE.md` (source, commit, list of changes), and the upstream `LICENSE` unchanged. No scripts.
 - **Verify:** search the new folder again; any hit outside the rules section is a miss.
 
-### 2. Run it on the four skills (10 min)
+### 2. Run it on the five skills (10 min)
 
-Adapt these four, in this order, because each later skill calls the earlier ones:
+Adapt these five, in this order, because each later skill calls the earlier ones:
 
 | Skill | Why the pipeline needs it |
 |---|---|
@@ -53,6 +53,7 @@ Adapt these four, in this order, because each later skill calls the earlier ones
 | `implement` | Stage 3: spec → code. Calls `tdd` and `code-review` (pipeline calls it, so `--callable`) |
 | `to-spec` | Stage 2: ticket → spec saved as a local file (pipeline calls it, so `--callable`) |
 | `diagnosing-bugs` | Build 3: bug-ticket branch. Calls nothing |
+| `pr` | Stage 5: PR body. No external calls, so this one is a customization: ask `adapt-skill` to **add** the Palo Alto evidence rules (save to `.scratch/<ticket-id>/pr.md`, never open a PR, command + compiler + architecture on every claim, targets not run, no screenshots) |
 
 These are used as they are, by their plugin name. `adapt-skill` should find them clean and not copy them:
 
@@ -72,7 +73,7 @@ Read every findings table before you approve it. The first run that touches tick
 
 Use [AUDIT-WORKSHEET.md](AUDIT-WORKSHEET.md). For each skill, open the diff between upstream and `pa-` and check it against the findings table. The misses that matter are phrases, not commands: "publish to the issue tracker" makes an agent pick a CLI on its own. Every miss is a fix to `adapt-skill` (add it to its Gotchas), not only to the `pa-` skill. Run it again if you changed it.
 
-Then run `/skills` and confirm the four `pa-` skills are listed. Ask Claude: *"Using only pa-to-spec, what would you do to publish a spec?"* The answer must be a local file path, not a CLI.
+Then run `/skills` and confirm the five `pa-` skills are listed. Ask Claude: *"Using only pa-to-spec, what would you do to publish a spec?"* The answer must be a local file path, not a CLI.
 
 If you have time left, run `adapt-skill` on a fifth skill from [SKILL-SOURCES.md](../SKILL-SOURCES.md), copied from GitHub in the browser. That is how the team will bring in every public skill from now on.
 
@@ -82,6 +83,6 @@ The broker is how other Palo Alto teams reach outside services. Until we know ho
 
 ## Done when
 
-- `adapt-skill`, four `pa-` skills, and `docs/agents/issue-tracker.md` exist, each `pa-` skill with `SOURCE.md` and `LICENSE`.
+- `adapt-skill`, five `pa-` skills, and `docs/agents/issue-tracker.md` exist, each `pa-` skill with `SOURCE.md` and `LICENSE`.
 - A search of `.claude/skills/pa-*` for `curl`, `gh `, `glab`, `http`, `Playwright`, and `.sh` finds nothing except the rules that forbid them.
 - You found at least one thing `adapt-skill` got wrong or missed, and fixed the skill, not only its output.

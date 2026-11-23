@@ -21,7 +21,7 @@ You need Build 1's `.claude/skills/pa-*` and `docs/agents/issue-tracker.md` in t
 ```powershell
 mkdir .claude\skills -Force; Copy-Item -Recurse skeleton\ticket-to-pr .claude\skills\
 ```
- Run `/skills` and confirm `pa-to-spec`, `pa-implement`, `pa-code-review`, and `ticket-to-pr` are listed.
+ Run `/skills` and confirm `pa-to-spec`, `pa-implement`, `pa-code-review`, `pa-pr`, and `ticket-to-pr` are listed.
 
 The sample is [TICKET.md](TICKET.md) (NET-1502): combined timeout units and an overflow that only shows on the Windows build.
 
@@ -31,7 +31,7 @@ The sample is [TICKET.md](TICKET.md) (NET-1502): combined timeout units and an o
 
 Open `.claude/skills/ticket-to-pr/SKILL.md` (copied from `skeleton/`). Replace each `<...>` with goals and stop conditions, not keystrokes. Each section answers one question: where the ticket comes from and where it is saved; which skill runs, on which model, in which context; which command proves it and what blocks the PR; what evidence the PR body needs. Decide for each stage:
 
-- which skill runs (`pa-to-spec`, `pa-implement`, `pa-code-review`, `mattpocock-skills:pr`, `mattpocock-skills:grilling`);
+- which skill runs (`pa-to-spec`, `pa-implement`, `pa-code-review`, `pa-pr`, `mattpocock-skills:grilling`);
 - whether it runs here or in a fresh subagent;
 - what it must hand back, and what makes the pipeline stop.
 
