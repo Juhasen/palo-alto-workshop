@@ -20,7 +20,7 @@ Goal: <one sentence: what exists at the end, and what this skill never does>
 
 ## 1. Source
 
-<Where may the upstream skill come from, and where not? What do you record about it? When do you stop because of the license? Which files do you look at?>
+<What must exist before you start (hint: docs/agents/)? Where may the upstream skill come from, and where not? What do you record about it? When do you stop because of the license? Which files do you look at?>
 
 ## 2. Audit (stop: user approves the findings)
 
