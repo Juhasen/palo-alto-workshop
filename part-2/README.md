@@ -29,6 +29,7 @@ Each build starts where the previous one ended: the skills you write in Build 1 
 - Install nothing beyond Caveman, Ponytail, and `mattpocock-skills`.
 - No network calls from the agent: no `curl`, `gh`, `npx`, or web fetches. Jira only through the Claude connector; other services through the policy broker (details from the instructor), or paste.
 - Plain Markdown skills only: no scripts or hooks.
+- Palo Alto's endpoint policies apply: Claude cannot read `.env`, `./secrets/`, `credentials.json`, `~/.ssh`, `~/.aws`, or `./build`, and `curl`, `wget`, and `WebFetch` are blocked. Do not try to work around them; build results come from the console output.
 - Name the compiler and architecture behind every "it works", and list what you did not run.
 
 Public skill sources we checked, with licenses: [SKILL-SOURCES.md](SKILL-SOURCES.md).

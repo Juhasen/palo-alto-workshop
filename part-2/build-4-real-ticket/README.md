@@ -9,6 +9,7 @@
    - `.claude/skills/pa-*` and `.claude/skills/ticket-to-pr/`
    - `docs/agents/issue-tracker.md`
 3. Add your repository's real build and test command to the Gotchas of `ticket-to-pr`, and to `CLAUDE.md` if it is missing there.
+4. If your build writes to a `./build` directory, Claude cannot read files there (Palo Alto endpoint policy). Add a Gotcha: read test results from the build command's console output, never from `./build`. The same applies to `.env` and `secrets/`: if the ticket needs them, the skill stops and asks you.
 
 ## Run (25 min)
 
